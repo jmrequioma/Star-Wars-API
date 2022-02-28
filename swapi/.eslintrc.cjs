@@ -20,5 +20,10 @@ module.exports = {
         "plugin:cypress/recommended"
       ]
     }
-  ]
-}
+  ],
+  "rules": {
+    "semi": ["error", "always"],
+    "max-len": ["error", {"code": 120}],
+    "space-before-blocks": ["error"]
+  }
+};
