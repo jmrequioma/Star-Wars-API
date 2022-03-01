@@ -24,7 +24,6 @@
     ]
   },
   "dependencies": {
-    "@mdi/font": "5.9.55",
     "pinia": "^2.0.11",
     "roboto-fontface": "*",
     "vue": "^3.2.31",
@@ -33,6 +32,7 @@
     "webfontloader": "^1.0.0"
   },
   "devDependencies": {
+    "@mdi/font": "^6.5.95",
     "@rushstack/eslint-patch": "^1.1.0",
     "@types/jsdom": "^16.2.14",
     "@types/node": "^16.11.25",
@@ -45,7 +45,7 @@
     "eslint": "^8.5.0",
     "eslint-plugin-cypress": "^2.12.1",
     "eslint-plugin-vue": "^8.2.0",
-    "husky": "^7.0.4",
+    "husky": "^4.3.8",
     "jsdom": "^19.0.0",
     "lint-staged": "^12.3.4",
     "sass": "^1.38.0",
