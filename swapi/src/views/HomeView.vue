@@ -5,7 +5,7 @@
             text-sm-h2
             text-md-h1"
         >
-            Star Wars
+            Star Wars test
         </h1>
     </div>
 </template>
