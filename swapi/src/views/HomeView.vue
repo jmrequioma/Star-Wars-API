@@ -9,7 +9,7 @@
                     variant="outlined"
                     @click="search"
                 >
-                    Hit the Hyperdrive!
+                    Chewie, Hit the Hyperdrive!
                 </v-btn>
             </div>
             <div class="d-flex justify-end mt-8">
@@ -21,12 +21,16 @@
     </div>
 </template>
 <script setup lang="ts">
-const emit = defineEmits<{
-  (e: 'search'): void
-}>();
+import type { Emitter } from 'mitt';
+import { inject } from 'vue';
 
+type Events = {
+ search: void;
+};
+
+const emitter : Emitter<Events> = inject('emitter') as Emitter<Events>;
 function search() : void {
-    emit('search');
+    emitter.emit('search');
 }
 </script>
 <style lang="scss" scoped>

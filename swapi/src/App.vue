@@ -19,7 +19,7 @@
         </v-app-bar>
         <v-main class="body">
             <v-container fluid>
-                <HomeView @search="drawer=true"/>
+                <router-view />
             </v-container>
         </v-main>
         <SiteFooter />
@@ -27,13 +27,20 @@
 </template>
 
 <script setup lang="ts">
-import { ref } from 'vue';
+import type { Emitter } from 'mitt';
+import { inject, ref } from 'vue';
 import NavDrawerMenu from './components/NavDrawerMenu.vue';
-import HomeView from './views/HomeView.vue';
 import SiteFooter from './components/SiteFooter.vue';
 
-const drawer = ref(false);
+type Events = {
+ search: void;
+};
 
+const emitter : Emitter<Events> = inject('emitter') as Emitter<Events>;
+const drawer = ref(false);
+emitter.on('search', () => {
+    drawer.value = true;
+});
 </script>
 <style>
     .body {
