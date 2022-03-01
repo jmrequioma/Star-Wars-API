@@ -1,8 +1,8 @@
-import { defineConfig } from 'vite'
-import vue from '@vitejs/plugin-vue'
-import vuetify from '@vuetify/vite-plugin'
+import { defineConfig } from 'vite';
+import vue from '@vitejs/plugin-vue';
+import vuetify from '@vuetify/vite-plugin';
 
-import path from 'path'
+import path from 'path';
 
 // https://vitejs.dev/config/
 export default defineConfig({
@@ -16,6 +16,7 @@ export default defineConfig({
   define: { 'process.env': {} },
   resolve: {
     alias: {
+      // eslint-disable-next-line no-undef
       '@': path.resolve(__dirname, 'src'),
     },
   },
@@ -32,4 +33,4 @@ export default defineConfig({
     ]
   },
   */
-})
+});

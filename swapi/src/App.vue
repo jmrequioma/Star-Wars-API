@@ -1,23 +1,11 @@
 <template>
-  <v-app>
-    <v-main>
-      <HelloWorld/>
+	<v-app>
+    <v-main class="pa-5">
+      <HomeView />
     </v-main>
   </v-app>
 </template>
 
-<script lang="ts">
-import HelloWorld from './components/HelloWorld.vue';
-
-export default {
-  name: 'App',
-
-  components: {
-    HelloWorld,
-  },
-
-  data: () => ({
-    //
-  }),
-};
+<script setup lang="ts">
+import HomeView from './views/HomeView.vue';
 </script>
