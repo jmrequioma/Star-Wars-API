@@ -47,11 +47,11 @@ type SocialLink = {
     url: string;
 };
 
-const igInfo = getConstant('instagram');
-const linkedinInfo = getConstant('linkedin');
-const twitterInfo = getConstant('twitter');
+const igInfo = getSocialLink('instagram');
+const linkedinInfo = getSocialLink('linkedin');
+const twitterInfo = getSocialLink('twitter');
 
-function getConstant(key : string) {
+function getSocialLink(key : string) : SocialLink {
     return constants.socialLinks.find(
         (link : SocialLink) => link.site == key);
 }

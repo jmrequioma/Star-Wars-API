@@ -10,7 +10,7 @@ describe('SiteFooter', () => {
         wrapper = mount(SiteFooter);
     });
 
-    it('redirects to the correct social links', () => {
+    it('validates the social links', () => {
         const igBtn = wrapper.find('v-btn.ig-btn');
         const linkedinBtn = wrapper.find('v-btn.linkedin-btn');
         const twitterBtn = wrapper.find('v-btn.twitter-btn');
