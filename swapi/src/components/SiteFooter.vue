@@ -53,7 +53,8 @@ const twitterInfo = getSocialLink('twitter');
 
 function getSocialLink(key : string) : SocialLink {
     return constants.socialLinks.find(
-        (link : SocialLink) => link.site == key);
+        (link : SocialLink) => link.site == key
+    );
 }
 </script>
 <style>

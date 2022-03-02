@@ -30,6 +30,7 @@ type Events = {
 
 const emitter : Emitter<Events> = inject('emitter') as Emitter<Events>;
 function search() : void {
+    // emit event for App.vue to use
     emitter.emit('search');
 }
 </script>
