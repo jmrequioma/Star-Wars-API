@@ -8,14 +8,25 @@
         >
             <v-card-text>
                 <v-btn
-                    class="mx-4"
-                    icon="mdi-home"
+                    class="mx-4 ig-btn"
+                    icon="mdi-instagram"
                     variant="plain"
+                    :href="igInfo.url"
+                    target="_blank"
                 />
                 <v-btn
-                    class="mx-4"
-                    icon="mdi-email"
+                    class="mx-4 linkedin-btn"
+                    icon="mdi-linkedin"
                     variant="plain"
+                    :href="linkedinInfo.url"
+                    target="_blank"
+                />
+                <v-btn
+                    class="mx-4 twitter-btn"
+                    icon="mdi-twitter"
+                    variant="plain"
+                    :href="twitterInfo.url"
+                    target="_blank"
                 />
             </v-card-text>
 
@@ -29,6 +40,21 @@
     </v-footer>
 </template>
 <script setup lang="ts">
+import { constants } from '@/lib/constants/index.js';
+
+type SocialLink = {
+    site: string;
+    url: string;
+};
+
+const igInfo = getConstant('instagram');
+const linkedinInfo = getConstant('linkedin');
+const twitterInfo = getConstant('twitter');
+
+function getConstant(key : string) {
+    return constants.socialLinks.find(
+        (link : SocialLink) => link.site == key);
+}
 </script>
 <style>
 </style>
