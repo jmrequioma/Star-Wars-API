@@ -8,14 +8,14 @@
 <script setup lang="ts">
 import { ref, onMounted } from 'vue';
 import { usePlanetsStore } from '@/stores/planets/index';
-import { useEntityDetails } from '@/composables/useEntityDetails';
+// import { useEntityDetails } from '@/composables/useEntityDetails';
 
 import DataTable from '@/components/DataTable.vue';
 
 const store = usePlanetsStore();
 const planets = ref([]);
-const selectedEntityUrl = ref('');
-const { selectedEntity } = useEntityDetails(selectedEntityUrl.value);
+const selectedPlanetUrl = ref('');
+const selectedPlanet = ref({});
 
 onMounted(async() => {
     getPlanets();
@@ -31,9 +31,14 @@ async function getPlanets() {
     }
 }
 
-function openDetails(url : string) {
-    selectedEntityUrl.value = url;
-    console.log('should be specific entry', selectedEntityUrl.value);
+async function openDetails(url : string) {
+    selectedPlanetUrl.value = url;
+    try {
+        let res = await store.fetchPlanetDetails(url);
+        selectedPlanet.value = res.data;
+    } catch (error) {
+        console.error('fetching selected planet failed', error);
+    }
 }
 </script>
 <style>
