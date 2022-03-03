@@ -8,14 +8,14 @@
 <script setup lang="ts">
 import { ref, onMounted } from 'vue';
 import { usePlanetsStore } from '@/stores/planets/index';
-// import { useEntityDetails } from '@/composables/useEntityDetails';
+import { useFetch } from '@/composables/fetch';
 
 import DataTable from '@/components/DataTable.vue';
 
 const store = usePlanetsStore();
 const planets = ref([]);
 const selectedPlanetUrl = ref('');
-const selectedPlanet = ref({});
+const { selectedEntity, error } = useFetch(selectedPlanetUrl);
 
 onMounted(async() => {
     getPlanets();
@@ -31,14 +31,8 @@ async function getPlanets() {
     }
 }
 
-async function openDetails(url : string) {
+function openDetails(url : string) {
     selectedPlanetUrl.value = url;
-    try {
-        let res = await store.fetchPlanetDetails(url);
-        selectedPlanet.value = res.data;
-    } catch (error) {
-        console.error('fetching selected planet failed', error);
-    }
 }
 </script>
 <style>
