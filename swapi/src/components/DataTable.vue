@@ -5,22 +5,40 @@
                 <template v-slot:default>
                     <thead>
                         <tr>
-                            <th class="text-left">
-                                {{ headers[0] }}
-                            </th>
-                            <th class="text-left">
-                                {{ headers[1] }}
-                            </th>
+                            <template v-if="!details">
+                                <th>
+                                    Name
+                                </th>
+                            </template>
+                            <template v-else>
+                                <th
+                                    v-for="(value, key) in entities[0]"
+                                    :key="key"
+                                >
+                                    {{ key }}
+                                </th>
+                            </template>
                         </tr>
                     </thead>
                     <tbody>
                         <tr
                             v-for="entity in entities"
                             :key="entity.name"
-                            @click="openDetails"
+                            @click="goToDetails(entity.url)"
                         >
-                            <td>{{ entity.name }}</td>
-                            <td>{{ entity.population }}</td>
+                            <template v-if="!details">
+                                <td>
+                                    {{ entity.name }}
+                                </td>
+                            </template>
+                            <template v-else>
+                                <td
+                                    v-for="item in entity"
+                                    :key="`${item}-key`"
+                                >
+                                    {{ item }}
+                                </td>
+                            </template>
                         </tr>
                     </tbody>
                 </template>
@@ -30,10 +48,16 @@
 </template>
 <script setup lang="ts">
 
+const emit = defineEmits(['openDetails']);
+
 defineProps({
-    headers: {
-        type: Array,
-        required: true
+    /* determines whether data table should show all details
+    of the entity
+    */
+    details: {
+        type: Boolean,
+        required: false,
+        default: false
     },
 
     entities: {
@@ -42,11 +66,11 @@ defineProps({
     }
 });
 
-function openDetails() {
+function goToDetails(url : string) {
     /* this function opens the details page of
         selected entity on table row
     */
-
+    emit('openDetails', url);
 }
 </script>
 <style>

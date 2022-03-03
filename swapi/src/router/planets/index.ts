@@ -1,4 +1,4 @@
-import PlanetsView from '../../views/PlanetsView.vue';
+import PlanetsView from '../../views/planets/PlanetsView.vue';
 
 export default [{
     path: '/planets',
