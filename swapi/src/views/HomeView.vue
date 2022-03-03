@@ -1,5 +1,5 @@
 <template>
-    <div class="home-view d-flex justify-center mt-16">
+    <div class="home-view d-flex justify-center">
         <div class="greet-container">
             <div>
                 <h1>Start searching for things in a galaxy far, far away...</h1>
@@ -40,6 +40,7 @@ function search() : void {
     }
 
     .home-view {
+        margin-top: 25vh;
         left: 50%;
         right: 50%;
     }

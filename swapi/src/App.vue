@@ -9,7 +9,7 @@
             color="black"
             density="compact"
         >
-            <v-app-bar-title>Explore</v-app-bar-title>
+            <v-app-bar-title class="title">{{ appbarTitle }}</v-app-bar-title>
             <template v-slot:prepend>
                 <v-app-bar-nav-icon
                     color="black"
@@ -27,8 +27,10 @@
 </template>
 
 <script setup lang="ts">
+import { inject, ref, computed } from 'vue';
+import { useRoute } from 'vue-router';
 import type { Emitter } from 'mitt';
-import { inject, ref } from 'vue';
+
 import NavDrawerMenu from './components/NavDrawerMenu.vue';
 import SiteFooter from './components/SiteFooter.vue';
 
@@ -38,6 +40,14 @@ type Events = {
 
 const emitter : Emitter<Events> = inject('emitter') as Emitter<Events>;
 const drawer = ref(false);
+const route = useRoute();
+
+const appbarTitle = computed(() => {
+    return route.name;
+});
+
+
+
 emitter.on('search', () => {
     drawer.value = true;
 });
@@ -45,5 +55,9 @@ emitter.on('search', () => {
 <style>
     .body {
         height: 100vh;
+    }
+
+    .title {
+        text-transform: capitalize;
     }
 </style>
