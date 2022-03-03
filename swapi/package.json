@@ -23,6 +23,7 @@
     ]
   },
   "dependencies": {
+    "axios": "^0.26.0",
     "mitt": "^3.0.0",
     "pinia": "^2.0.11",
     "roboto-fontface": "*",
