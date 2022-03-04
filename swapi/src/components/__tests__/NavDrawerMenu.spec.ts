@@ -28,5 +28,7 @@ describe('NavDrawerMenu', () => {
         router.push({ name: 'planets'});
         await router.isReady();
         expect(router.currentRoute.value.name).toBe('planets');
+        // test active state of navigation drawer menu
+        expect(wrapper.find('v-list-item[active=true]').html()).toContain('planets');
     });
 });
