@@ -5,15 +5,16 @@
                 <template v-slot:default>
                     <thead>
                         <tr>
-                            <template v-if="!details">
+                            <template v-if="!showDetails">
                                 <th>
                                     Name
                                 </th>
                             </template>
                             <template v-else>
                                 <th
-                                    v-for="(value, key) in entities[0]"
+                                    v-for="(value, key) in selectedEntity"
                                     :key="key"
+                                    class="table-header"
                                 >
                                     {{ key }}
                                 </th>
@@ -21,25 +22,27 @@
                         </tr>
                     </thead>
                     <tbody>
-                        <tr
-                            v-for="entity in entities"
-                            :key="entity.name"
-                            @click="goToDetails(entity.url)"
-                        >
-                            <template v-if="!details">
+                        <template v-if="!showDetails">
+                            <tr
+                                v-for="entity in entities"
+                                :key="entity.name"
+                                @click="goToDetails(entity.url)"
+                            >
                                 <td>
                                     {{ entity.name }}
                                 </td>
-                            </template>
-                            <template v-else>
+                            </tr>
+                        </template>
+                        <template v-else>
+                            <tr>
                                 <td
-                                    v-for="item in entity"
-                                    :key="`${item}-key`"
+                                    v-for="property in selectedEntity"
+                                    :key="`${property}-key`"
                                 >
-                                    {{ item }}
+                                    {{ property }}
                                 </td>
-                            </template>
-                        </tr>
+                            </tr>
+                        </template>
                     </tbody>
                 </template>
             </v-table>
@@ -51,32 +54,26 @@
 const emit = defineEmits(['openDetails']);
 
 defineProps({
-    /* determines whether data table should show all details
-    of the entity
-    */
-    details: {
-        type: Boolean,
-        required: false,
-        default: false
-    },
-
-    entities: {
-        type: Array,
-        required: true
-    }
+    showDetails: Boolean,
+    entities: Array,
+    selectedEntity: Object
 });
 
 function goToDetails(url : string) {
     /* this function opens the details page of
-        selected entity on table row
+        selected entity on table row via emission
     */
     emit('openDetails', url);
 }
 </script>
-<style>
+<style lang="scss">
     .table-container {
         min-width: 80vw;
         max-height: 480px;
         overflow-y: auto;
+
+        .table-header {
+            text-transform: capitalize;
+        }
     }
 </style>

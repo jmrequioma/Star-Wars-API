@@ -1,14 +1,11 @@
-import { ref, watch, type Ref } from 'vue';
+import { ref, type Ref } from 'vue';
 import axios from 'axios';
 
 export function useFetch(url : Ref) {
     const selectedEntity = ref({});
     const error = ref('');
 
-    watch(url, (newUrl) => {
-        fetchEntity(newUrl);
-
-    });
+    fetchEntity(url.value);
 
     async function fetchEntity(url : string) {
         // fetch specific entity
@@ -16,7 +13,7 @@ export function useFetch(url : Ref) {
             const res = await axios.get(url);
             selectedEntity.value = res.data;
         } catch (error) {
-            console.error(error);
+            console.error('fetching planet failed ', error);
         }
     }
 
