@@ -52,7 +52,12 @@ import { useRoute } from 'vue-router';
 const route = useRoute();
 
 function navItemIsActive(routeName : string) : boolean {
-    return route.name == routeName;
+    if (routeName == 'home') {
+        return route.name == routeName;
+    } else if (routeName == 'planets') {
+        return route.name == routeName || route.name == 'planet details';
+    }
+    return false;
 }
 </script>
 <style>
