@@ -36,10 +36,21 @@
                         <template v-else>
                             <tr>
                                 <td
-                                    v-for="property in selectedEntity"
+                                    v-for="(key, property) in selectedEntity"
                                     :key="`${property}-key`"
                                 >
-                                    {{ property }}
+                                    <template v-if="property == 'residents'">
+                                        <template
+                                            v-for="data in key"
+                                            :key="`${data}-key`"
+                                        >
+                                            <!-- TODO: fix spacing -->
+                                            {{ data.name }}
+                                        </template>
+                                    </template>
+                                    <template v-else>
+                                        {{ key }}
+                                    </template>
                                 </td>
                             </tr>
                         </template>

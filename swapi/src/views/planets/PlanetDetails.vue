@@ -39,25 +39,25 @@ async function fetchPlanet(url : string) {
 
 function fetchRelatedEntities() {
     for (let key in selectedEntity.value) {
-        console.log(`${key}: ${selectedEntity.value[key]}`);
         if ((key == 'residents')) {
-            console.log('residents', selectedEntity.value[key]);
             fetchRelatedEntityName(selectedEntity.value[key], key);
         }
     }
 }
 
 async function fetchRelatedEntityName(url: object, key : string) {
+    let relatedEntities = [];
     for (let property in url) {
         let individualUrl = url[property];
         try {
             let res = await store.fetchEntityDetails(individualUrl);
             let fetchedEntity = res.data;
-            selectedEntity.value[key] = fetchedEntity;
+            relatedEntities.push(fetchedEntity);
         } catch (error) {
             console.error('fetching related entities details failed', error);
         }
     }
+    selectedEntity.value[key] = relatedEntities;
 }
 
 </script>
