@@ -48,9 +48,6 @@ function fetchRelatedEntities() {
 }
 
 async function fetchRelatedEntityName(url: object, key : string) {
-    console.log('inside');
-
-
     for (let property in url) {
         let individualUrl = url[property];
         try {
