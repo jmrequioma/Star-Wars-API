@@ -68,10 +68,12 @@
     </div>
 </template>
 <script setup lang="ts">
-import { computed } from 'vue';
+import { computed, onMounted } from 'vue';
 import { useExtractId } from '@/composables/extractId';
 
-const emit = defineEmits(['openDetails']);
+const emit = defineEmits([
+    'openDetails', 'fetchMore'
+]);
 
 defineProps({
     showDetails: Boolean,
@@ -81,6 +83,17 @@ defineProps({
 
 const relatedEntitiesCol = computed(() => {
     return ['residents', 'films'];
+});
+
+onMounted(() => {
+    const listElm = document.querySelector('.table-container');
+    if (listElm) {
+        listElm.addEventListener('scroll', e => {
+            if (listElm.scrollTop + listElm.clientHeight >= listElm.scrollHeight) {
+                emit('fetchMore');
+            }
+        });
+    }
 });
 
 function goToDetails(url : string) {
@@ -124,6 +137,7 @@ function relatedEntityLink(data : object) {
 
     return link;
 }
+
 </script>
 <style lang="scss">
     .table-container {
