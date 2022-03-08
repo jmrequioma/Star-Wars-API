@@ -63,10 +63,11 @@ async function fetchRelatedEntityName(url: object, key : string) {
             relatedEntities.push(fetchedEntity);
         } catch (error) {
             console.error('fetching related entities details failed', error);
+        } finally {
+            store.isFetchingDetails = false;
         }
     }
     store.entity[key] = relatedEntities;
-    store.isFetchingDetails = false;
 }
 
 </script>
