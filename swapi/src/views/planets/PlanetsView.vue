@@ -1,34 +1,33 @@
 <template>
-    <DataTable
-        @open-details="openDetails"
-        :show-details="false"
-        :entities="planets"
-    />
+    <div class="d-flex justify-center">
+        <DataTable
+            v-if="!store.isFetchingPlanets"
+            @open-details="openDetails"
+            :show-details="false"
+            :entities="store.planets"
+        />
+        <PageLoaderVue v-else />
+    </div>
 </template>
 <script setup lang="ts">
-import { ref, onMounted } from 'vue';
+import { onMounted } from 'vue';
 import { usePlanetsStore } from '@/stores/planets/index';
 import { useRouter } from 'vue-router';
 import { useExtractId } from '@/composables/extractId';
 
 import DataTable from '@/components/DataTable.vue';
+import PageLoaderVue from '@/components/PageLoader.vue';
 
 const store = usePlanetsStore();
-const planets = ref([]);
 const router = useRouter();
 
-onMounted(async() => {
+onMounted(() => {
+    store.isFetchingPlanets = true;
     getPlanets();
 });
 
-async function getPlanets() {
-    // get planets from swapi
-    try {
-        let res = await store.fetchPlanets();
-        planets.value = res.data.results;
-    } catch (error) {
-        console.error('fetching planets failed', error);
-    }
+function getPlanets() {
+    store.fetchPlanets();
 }
 
 function openDetails(url : string) {

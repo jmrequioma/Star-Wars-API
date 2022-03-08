@@ -1,46 +1,54 @@
 <template>
-    <DataTable
-        :show-details="true"
-        :selected-entity="selectedEntity"
-    />
-    <div></div>
+    <div class="d-flex justify-center">
+        <DataTable
+            v-if="!store.isFetchingDetails"
+            :show-details="true"
+            :selected-entity="store.selectedEntity"
+        />
+        <PageLoader v-else />
+    </div>
 </template>
 <script setup lang="ts">
 import DataTable from '@/components/DataTable.vue';
-import { usePlanetsStore } from '@/stores/planets/index';
+import PageLoader from '@/components/PageLoader.vue';
+import { useEntityStore } from '@/stores/index';
 
-import { computed, onMounted, ref } from 'vue';
+import { computed, onMounted, watch } from 'vue';
 
 const props = defineProps({
     id: String
 });
 
-const store = usePlanetsStore();
+const store = useEntityStore();
 
-const selectedEntity = ref(null);
 const selectedPlanetUrl = computed(() => {
     return `https://swapi.dev/api/planets/${props.id}`;
 });
 
-onMounted(async() => {
-    await fetchPlanet(selectedPlanetUrl.value);
-    // let modifiedEntity = useFetchRelatedEntities(selectedEntity);
-    fetchRelatedEntities();
+const relatedEntitiesCol = computed(() => {
+    return ['residents', 'films'];
 });
 
-async function fetchPlanet(url : string) {
-    try {
-        let res = await store.fetchEntityDetails(url);
-        selectedEntity.value = res.data;
-    } catch (error) {
-        console.error('fetching planet details failed', error);
+watch(
+    () => store.entity,
+    () => {
+        fetchRelatedEntities();
     }
+);
+
+onMounted(() => {
+    store.isFetchingDetails = true;
+    fetchPlanet(selectedPlanetUrl.value);
+});
+
+function fetchPlanet(url : string) {
+    store.fetchEntityDetails(url);
 }
 
 function fetchRelatedEntities() {
-    for (let key in selectedEntity.value) {
-        if ((key == 'residents')) {
-            fetchRelatedEntityName(selectedEntity.value[key], key);
+    for (let key in store.selectedEntity) {
+        if ((relatedEntitiesCol.value.includes(key))) {
+            fetchRelatedEntityName(store.selectedEntity[key], key);
         }
     }
 }
@@ -50,14 +58,15 @@ async function fetchRelatedEntityName(url: object, key : string) {
     for (let property in url) {
         let individualUrl = url[property];
         try {
-            let res = await store.fetchEntityDetails(individualUrl);
+            let res = await store.fetchRelatedEntityDetails(individualUrl);
             let fetchedEntity = res.data;
             relatedEntities.push(fetchedEntity);
         } catch (error) {
             console.error('fetching related entities details failed', error);
         }
     }
-    selectedEntity.value[key] = relatedEntities;
+    store.entity[key] = relatedEntities;
+    store.isFetchingDetails = false;
 }
 
 </script>
