@@ -31,6 +31,8 @@
             prepend-icon="mdi-account-group"
             title="People"
             value="people"
+            :to="{ name: 'people' }"
+            :active="navItemIsActive('people')"
         />
         <v-list-item
             prepend-icon="mdi-movie-roll"
@@ -56,6 +58,8 @@ function navItemIsActive(routeName : string) : boolean {
         return route.name == routeName;
     } else if (routeName == 'planets') {
         return route.name == routeName || route.name == 'planet details';
+    } else if (routeName == 'people') {
+        return route.name == routeName || route.name == 'people details';
     }
     return false;
 }

@@ -125,10 +125,10 @@ function relatedEntityLink(data : object) {
         if (entityName.value == 'people') {
             routerLinkName = 'people details';
         } else if (entityName.value == 'films') {
-            routerLinkName = 'film details';
+            // routerLinkName = 'film details';
         }
         link = {
-            name: 'home',
+            name: routerLinkName,
             params: {
                 id: entityId.value
             }
