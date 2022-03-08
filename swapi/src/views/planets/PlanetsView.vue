@@ -3,6 +3,7 @@
         <DataTable
             v-if="!store.isFetchingPlanets"
             @open-details="openDetails"
+            @fetch-more="fetchMore"
             :show-details="false"
             :entities="store.planets"
         />
@@ -22,8 +23,11 @@ const store = usePlanetsStore();
 const router = useRouter();
 
 onMounted(() => {
-    store.isFetchingPlanets = true;
-    getPlanets();
+    if (!store.fetchedPlanets.length) {
+        store.isFetchingPlanets = true;
+        // fetch only if empty
+        getPlanets();
+    }
 });
 
 function getPlanets() {
@@ -42,6 +46,13 @@ function openDetails(url : string) {
             }
         }
     );
+}
+
+function fetchMore() {
+    if (store.page < (store.planetsCount / 10)) {
+        store.page++;
+        getPlanets();
+    }
 }
 </script>
 <style>
