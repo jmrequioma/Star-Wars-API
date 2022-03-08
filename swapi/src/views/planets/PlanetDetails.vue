@@ -11,6 +11,7 @@
 <script setup lang="ts">
 import DataTable from '@/components/DataTable.vue';
 import PageLoader from '@/components/PageLoader.vue';
+
 import { useEntityStore } from '@/stores/index';
 
 import { computed, onMounted, watch } from 'vue';
@@ -24,6 +25,7 @@ const store = useEntityStore();
 const selectedPlanetUrl = computed(() => {
     return `https://swapi.dev/api/planets/${props.id}`;
 });
+
 
 const relatedEntitiesCol = computed(() => {
     return ['residents', 'films'];

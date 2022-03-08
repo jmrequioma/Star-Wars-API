@@ -45,7 +45,11 @@
                                             :key="`${data}-key`"
                                             class="related-entity-data"
                                         >
-                                            {{ displayRelatedEntities(data, property) }}
+                                            <router-link
+                                                :to="relatedEntityLink(data)"
+                                            >
+                                                {{ displayRelatedEntities(data, property) }}
+                                            </router-link>
                                         </div>
                                     </template>
                                     <template v-else>
@@ -65,7 +69,7 @@
 </template>
 <script setup lang="ts">
 import { computed } from 'vue';
-
+import { useExtractId } from '@/composables/extractId';
 
 const emit = defineEmits(['openDetails']);
 
@@ -78,6 +82,7 @@ defineProps({
 const relatedEntitiesCol = computed(() => {
     return ['residents', 'films'];
 });
+
 function goToDetails(url : string) {
     /* this function opens the details page of
         selected entity on table row via emission
@@ -92,6 +97,32 @@ function displayRelatedEntities(data : object, property : string) {
     if (property == 'films') {
         return data.title ? `${data.title}` : '';
     }
+}
+
+function relatedEntityLink(data : object) {
+    /*
+        returns the router link
+        for the related entity
+    */
+
+    let link = {};
+    let routerLinkName = '';
+    if (data.url) {
+        const { entityId, entityName } = useExtractId(data.url);
+        if (entityName.value == 'people') {
+            routerLinkName = 'people details';
+        } else if (entityName.value == 'films') {
+            routerLinkName = 'film details';
+        }
+        link = {
+            name: 'home',
+            params: {
+                id: entityId.value
+            }
+        };
+    }
+
+    return link;
 }
 </script>
 <style lang="scss">
