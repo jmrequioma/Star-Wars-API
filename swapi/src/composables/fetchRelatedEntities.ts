@@ -44,8 +44,15 @@ export function useFetchRelatedEntities(url : Ref) {
          */
         isFetchingRelatedEntities.value = true;
         const relatedEntities = [];
-        for (const property in url) {
-            const individualUrl = url[property];
+        let modifiedUrl = url;
+        if (typeof(url) == 'string') {
+            modifiedUrl = {
+                0: url
+            };
+        }
+
+        for (const property in modifiedUrl) {
+            const individualUrl = modifiedUrl[property];
             try {
                 const res = await store.fetchRelatedEntityDetails(individualUrl);
                 const fetchedEntity = res.data;
@@ -56,6 +63,7 @@ export function useFetchRelatedEntities(url : Ref) {
                 store.isFetchingDetails = false;
             }
         }
+
         store.entity[key] = relatedEntities;
         isFetchingRelatedEntities.value = false;
     }

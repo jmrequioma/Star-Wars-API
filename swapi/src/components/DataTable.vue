@@ -69,10 +69,9 @@
 </template>
 <script setup lang="ts">
 import { computed, onMounted } from 'vue';
-import { useExtractId } from '@/composables/extractId';
 import { constants } from '@/lib/constants/index.js';
 import { useRoute } from 'vue-router';
-
+import { useExtractId } from '@/composables/extractId';
 
 const route = useRoute();
 const emit = defineEmits([
@@ -114,7 +113,8 @@ function goToDetails(url : string) {
 function displayRelatedEntities(data : object, property : string) {
     if (property == 'residents' || property == 'vehicles'
         || property == 'species' || property == 'starships'
-        || property == 'characters' || property == 'planets') {
+        || property == 'characters' || property == 'planets'
+        || property == 'homeworld') {
         return data.name ? `${data.name}` : '';
     } else if (property == 'films') {
         return data.title ? `${data.title}` : '';
@@ -127,26 +127,30 @@ function relatedEntityLink(data : object) {
         for the related entity
     */
 
-    let link = {};
-    let routerLinkName = '';
-    if (data.url) {
-        const { entityId, entityName } = useExtractId(data.url);
-        if (entityName.value == 'people') {
-            routerLinkName = 'people details';
-        } else if (entityName.value == 'films') {
-            // routerLinkName = 'film details';
+    let link = {
+        name: '',
+        params: {
+            id: '1'
         }
-        link = {
-            name: routerLinkName,
-            params: {
-                id: entityId.value
-            }
-        };
+    };
+    let modifiedUrl = data.url;
+    if (typeof(data.url) == 'string') {
+        modifiedUrl = data.url;
+    }
+    if (data.url) {
+        let { entityId, entityName } = useExtractId(modifiedUrl);
+        if (entityName.value == 'people') {
+            link.name = 'people details';
+        } else if (entityName.value == 'films') {
+            link.name = 'film details';
+        } else if (entityName.value == 'planets') {
+            link.name = 'planet details';
+        }
+        link.params.id = entityId.value;
     }
 
     return link;
 }
-
 </script>
 <style lang="scss">
     .table-container {
