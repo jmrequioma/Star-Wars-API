@@ -22,10 +22,10 @@
                     target="_blank"
                 />
                 <v-btn
-                    class="mx-4 twitter-btn"
-                    icon="mdi-twitter"
+                    class="mx-4 gmail-btn"
+                    icon="mdi-gmail"
                     variant="plain"
-                    :href="twitterInfo.url"
+                    :href="gmailInfo.url"
                     target="_blank"
                 />
             </v-card-text>
@@ -49,7 +49,7 @@ type SocialLink = {
 
 const igInfo = getSocialLink('instagram');
 const linkedinInfo = getSocialLink('linkedin');
-const twitterInfo = getSocialLink('twitter');
+const gmailInfo = getSocialLink('gmail');
 
 function getSocialLink(key : string) : SocialLink {
     return constants.socialLinks.find(

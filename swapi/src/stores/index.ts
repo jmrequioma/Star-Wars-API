@@ -5,7 +5,8 @@ export const useEntityStore = defineStore({
     id: 'entities',
     state: () => ({
         entity: null,
-        isFetchingDetails: false
+        isFetchingDetails: false,
+        isFetchingRelatedEntities: true
     }),
     getters: {
         selectedEntity: (state) => {

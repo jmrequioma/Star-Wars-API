@@ -1,6 +1,7 @@
 import { createRouter, createWebHistory } from 'vue-router';
 
 import PlanetsRoutes from './planets';
+import PeopleRoutes from './people';
 
 export const routes = [
     {
@@ -11,7 +12,8 @@ export const routes = [
             title: 'Home - Star Wars API'
         }
     },
-    ...PlanetsRoutes
+    ...PlanetsRoutes,
+    ...PeopleRoutes
 ];
 
 const router = createRouter({

@@ -9,8 +9,12 @@ export const constants = {
             url: 'https://www.linkedin.com/in/jerome-enrico-requioma-2a954a195/'
         },
         {
-            site: 'twitter',
-            url: 'https://www.twitter.com/SayHieronimo/'
+            site: 'gmail',
+            url: 'mailto:j.requioma@arcanys.com'
         }
     ],
+    entities: [
+        'residents', 'films', 'vehicles', 'species',
+        'starships'
+    ]
 };
