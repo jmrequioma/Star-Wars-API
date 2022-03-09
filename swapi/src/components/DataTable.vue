@@ -70,6 +70,8 @@
 <script setup lang="ts">
 import { computed, onMounted } from 'vue';
 import { useExtractId } from '@/composables/extractId';
+import { constants } from '@/lib/constants/index.js';
+
 
 const emit = defineEmits([
     'openDetails', 'fetchMore'
@@ -82,7 +84,7 @@ defineProps({
 });
 
 const relatedEntitiesCol = computed(() => {
-    return ['residents', 'films', 'vehicles'];
+    return constants.entities;
 });
 
 onMounted(() => {
@@ -104,7 +106,8 @@ function goToDetails(url : string) {
 }
 
 function displayRelatedEntities(data : object, property : string) {
-    if (property == 'residents' || property == 'vehicles') {
+    if (property == 'residents' || property == 'vehicles'
+        || property == 'species' || property == 'starships') {
         return data.name ? `${data.name}` : '';
     } else if (property == 'films') {
         return data.title ? `${data.title}` : '';

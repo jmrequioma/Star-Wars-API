@@ -13,4 +13,8 @@ export const constants = {
             url: 'https://www.twitter.com/SayHieronimo/'
         }
     ],
+    entities: [
+        'residents', 'films', 'vehicles', 'species',
+        'starships'
+    ]
 };

@@ -1,5 +1,7 @@
 import { ref, watch, computed, onMounted, type Ref } from 'vue';
 import { useEntityStore } from '@/stores/index';
+import { constants } from '@/lib/constants/index.js';
+
 
 
 export function useFetchRelatedEntities(url : Ref) {
@@ -8,7 +10,7 @@ export function useFetchRelatedEntities(url : Ref) {
     const isFetchingRelatedEntities = ref(false);
 
     const relatedEntitiesCol = computed(() => {
-        return ['residents', 'films', 'vehicles'];
+        return constants.entities;
     });
 
     onMounted(() => {
@@ -36,23 +38,27 @@ export function useFetchRelatedEntities(url : Ref) {
     }
 
     async function fetchRelatedEntityName(url: object, key : string) {
-            isFetchingRelatedEntities.value = true;
-            const relatedEntities = [];
-            for (const property in url) {
-                const individualUrl = url[property];
-                try {
-                    const res = await store.fetchRelatedEntityDetails(individualUrl);
-                    const fetchedEntity = res.data;
-                    relatedEntities.push(fetchedEntity);
-                } catch (error) {
-                    console.error('fetching related entities details failed', error);
-                } finally {
-                    store.isFetchingDetails = false;
-                }
+        /**
+         * fetches the related entities of fetched entity
+         * and stores it
+         */
+        isFetchingRelatedEntities.value = true;
+        const relatedEntities = [];
+        for (const property in url) {
+            const individualUrl = url[property];
+            try {
+                const res = await store.fetchRelatedEntityDetails(individualUrl);
+                const fetchedEntity = res.data;
+                relatedEntities.push(fetchedEntity);
+            } catch (error) {
+                console.error('fetching related entities details failed', error);
+            } finally {
+                store.isFetchingDetails = false;
             }
-            store.entity[key] = relatedEntities;
-            isFetchingRelatedEntities.value = false;
         }
+        store.entity[key] = relatedEntities;
+        isFetchingRelatedEntities.value = false;
+    }
 
     return {
         isFetchingRelatedEntities
