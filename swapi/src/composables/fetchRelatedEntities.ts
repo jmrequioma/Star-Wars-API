@@ -13,7 +13,7 @@ export function useFetchRelatedEntities(url : Ref) {
         return constants.entities;
     });
 
-    onMounted(async() => {
+    onMounted(() => {
         // unset the selected entity so it doesn't get displayed initially
         store.entity = null;
         store.isFetchingDetails = true;
