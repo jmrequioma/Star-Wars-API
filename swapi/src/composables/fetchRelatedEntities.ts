@@ -13,9 +13,12 @@ export function useFetchRelatedEntities(url : Ref) {
         return constants.entities;
     });
 
-    onMounted(() => {
+    onMounted(async() => {
+        // unset the selected entity so it doesn't get displayed initially
+        store.entity = null;
         store.isFetchingDetails = true;
-        fetchPeople(url.value);
+        fetchSelectedEntity(url.value);
+        store.isFetchingDetails = false;
     });
 
     watch(
@@ -25,16 +28,17 @@ export function useFetchRelatedEntities(url : Ref) {
         }
     );
 
-    function fetchPeople(url : string) {
+    function fetchSelectedEntity(url : string) {
         store.fetchEntityDetails(url);
     }
 
-    function fetchRelatedEntities() {
+    async function fetchRelatedEntities() {
         for (const key in store.selectedEntity) {
             if ((relatedEntitiesCol.value.includes(key))) {
-                fetchRelatedEntityName(store.selectedEntity[key], key);
+                await fetchRelatedEntityName(store.selectedEntity[key], key);
             }
         }
+        isFetchingRelatedEntities.value = false;
     }
 
     async function fetchRelatedEntityName(url: object, key : string) {
@@ -42,7 +46,6 @@ export function useFetchRelatedEntities(url : Ref) {
          * fetches the related entities of fetched entity
          * and stores it
          */
-        isFetchingRelatedEntities.value = true;
         const relatedEntities = [];
         let modifiedUrl = url;
         if (typeof(url) == 'string') {
@@ -52,6 +55,7 @@ export function useFetchRelatedEntities(url : Ref) {
         }
 
         for (const property in modifiedUrl) {
+            isFetchingRelatedEntities.value = true;
             const individualUrl = modifiedUrl[property];
             try {
                 const res = await store.fetchRelatedEntityDetails(individualUrl);
@@ -59,13 +63,10 @@ export function useFetchRelatedEntities(url : Ref) {
                 relatedEntities.push(fetchedEntity);
             } catch (error) {
                 console.error('fetching related entities details failed', error);
-            } finally {
-                store.isFetchingDetails = false;
             }
         }
 
         store.entity[key] = relatedEntities;
-        isFetchingRelatedEntities.value = false;
     }
 
     return {

@@ -16,7 +16,7 @@ export const useStarshipsStore = defineStore({
     },
     actions: {
         async fetchStarships() {
-            // get people from swapi
+            // get starships from swapi
             try {
                 let apiUrl = '/starships/';
                 if (this.page > 1) {

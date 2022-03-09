@@ -24,7 +24,7 @@ const props = defineProps({
 const store = useEntityStore();
 
 const selectedPeopleUrl = computed(() => {
-    return `https://swapi.dev/api/people/${props.id}`;
+    return `https://swapi.dev/api/people/${props.id}/`;
 });
 
 const { isFetchingRelatedEntities } = useFetchRelatedEntities(selectedPeopleUrl);

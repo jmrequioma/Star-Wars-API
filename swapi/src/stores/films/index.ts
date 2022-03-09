@@ -16,7 +16,7 @@ export const useFilmsStore = defineStore({
     },
     actions: {
         async fetchFilms() {
-            // get people from swapi
+            // get films from swapi
             try {
                 let apiUrl = '/films/';
                 if (this.page > 1) {

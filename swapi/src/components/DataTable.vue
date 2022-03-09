@@ -111,12 +111,9 @@ function goToDetails(url : string) {
 }
 
 function displayRelatedEntities(data : object, property : string) {
-    if (property == 'residents' || property == 'vehicles'
-        || property == 'species' || property == 'starships'
-        || property == 'characters' || property == 'planets'
-        || property == 'homeworld' || property == 'pilots') {
+    if (property != 'films') {
         return data.name ? `${data.name}` : '';
-    } else if (property == 'films') {
+    } else {
         return data.title ? `${data.title}` : '';
     }
 }
@@ -147,6 +144,10 @@ function relatedEntityLink(data : object) {
             link.name = 'planet details';
         } else if (entityName.value == 'starships') {
             link.name = 'starship details';
+        } else if (entityName.value == 'vehicles') {
+            link.name = 'vehicle details';
+        } else if (entityName.value == 'species') {
+            link.name = 'specie details';
         }
         link.params.id = entityId.value;
     }
