@@ -25,12 +25,10 @@ describe('NavDrawerMenu', () => {
     });
 
     it('renders a component via routing', async() => {
-        router.push({ name: 'home'});
-
-        // After this line, router is ready
+        router.push({ name: 'planets'});
         await router.isReady();
-        expect(router.currentRoute.value.name).toBe('home');
-
-        // TODO: add other routes
+        expect(router.currentRoute.value.name).toBe('planets');
+        // test active state of navigation drawer menu
+        expect(wrapper.find('v-list-item[active=true]').html()).toContain('planets');
     });
 });
