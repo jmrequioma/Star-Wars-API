@@ -6,7 +6,7 @@
                     <tr>
                         <template v-if="!showDetails">
                             <th>
-                                Name
+                                {{ headerDisplay }}
                             </th>
                         </template>
                         <template v-else>
@@ -28,7 +28,7 @@
                             @click="goToDetails(entity.url)"
                         >
                             <td>
-                                {{ entity.name }}
+                                {{ entity.name || entity.title }}
                             </td>
                         </tr>
                     </template>
@@ -71,8 +71,10 @@
 import { computed, onMounted } from 'vue';
 import { useExtractId } from '@/composables/extractId';
 import { constants } from '@/lib/constants/index.js';
+import { useRoute } from 'vue-router';
 
 
+const route = useRoute();
 const emit = defineEmits([
     'openDetails', 'fetchMore'
 ]);
@@ -85,6 +87,10 @@ defineProps({
 
 const relatedEntitiesCol = computed(() => {
     return constants.entities;
+});
+
+const headerDisplay = computed(() => {
+    return route.name == 'films' ? 'Title' : 'Name';
 });
 
 onMounted(() => {
@@ -107,7 +113,8 @@ function goToDetails(url : string) {
 
 function displayRelatedEntities(data : object, property : string) {
     if (property == 'residents' || property == 'vehicles'
-        || property == 'species' || property == 'starships') {
+        || property == 'species' || property == 'starships'
+        || property == 'characters' || property == 'planets') {
         return data.name ? `${data.name}` : '';
     } else if (property == 'films') {
         return data.title ? `${data.title}` : '';

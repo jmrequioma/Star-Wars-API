@@ -15,6 +15,6 @@ export const constants = {
     ],
     entities: [
         'residents', 'films', 'vehicles', 'species',
-        'starships'
+        'starships', 'characters', 'planets'
     ]
 };

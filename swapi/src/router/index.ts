@@ -2,6 +2,7 @@ import { createRouter, createWebHistory } from 'vue-router';
 
 import PlanetsRoutes from './planets';
 import PeopleRoutes from './people';
+import FilmsRoutes from './films';
 
 export const routes = [
     {
@@ -13,7 +14,8 @@ export const routes = [
         }
     },
     ...PlanetsRoutes,
-    ...PeopleRoutes
+    ...PeopleRoutes,
+    ...FilmsRoutes
 ];
 
 const router = createRouter({

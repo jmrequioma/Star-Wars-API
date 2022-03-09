@@ -36,8 +36,10 @@
         />
         <v-list-item
             prepend-icon="mdi-movie-roll"
-            title="Film"
-            value="film"
+            title="Films"
+            value="films"
+            :to="{ name: 'films' }"
+            :active="navItemIsActive('films')"
         />
         <v-list-item
             prepend-icon="mdi-dna"
@@ -60,6 +62,8 @@ function navItemIsActive(routeName : string) : boolean {
         return route.name == routeName || route.name == 'planet details';
     } else if (routeName == 'people') {
         return route.name == routeName || route.name == 'people details';
+    } else if (routeName == 'films') {
+        return route.name == routeName || route.name == 'film details';
     }
     return false;
 }
