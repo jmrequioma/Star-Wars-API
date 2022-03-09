@@ -82,7 +82,7 @@ defineProps({
 });
 
 const relatedEntitiesCol = computed(() => {
-    return ['residents', 'films'];
+    return ['residents', 'films', 'vehicles'];
 });
 
 onMounted(() => {
@@ -104,10 +104,9 @@ function goToDetails(url : string) {
 }
 
 function displayRelatedEntities(data : object, property : string) {
-    if (property == 'residents') {
+    if (property == 'residents' || property == 'vehicles') {
         return data.name ? `${data.name}` : '';
-    }
-    if (property == 'films') {
+    } else if (property == 'films') {
         return data.title ? `${data.title}` : '';
     }
 }
@@ -152,5 +151,9 @@ function relatedEntityLink(data : object) {
 
     .related-entity-data {
         min-width: 200px;
+    }
+
+    td {
+        min-width: 150px;
     }
 </style>

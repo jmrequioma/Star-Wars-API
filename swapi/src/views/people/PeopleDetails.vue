@@ -1,7 +1,7 @@
 <template>
     <div class="d-flex justify-center">
         <DataTable
-            v-if="!store.isFetchingDetails"
+            v-if="!store.isFetchingDetails && !isFetchingRelatedEntities"
             :show-details="true"
             :selected-entity="store.selectedEntity"
         />
@@ -13,8 +13,9 @@ import DataTable from '@/components/DataTable.vue';
 import PageLoader from '@/components/PageLoader.vue';
 
 import { useEntityStore } from '@/stores/index';
+import { useFetchRelatedEntities } from '@/composables/fetchRelatedEntities';
 
-import { computed, onMounted, watch } from 'vue';
+import { computed } from 'vue';
 
 const props = defineProps({
     id: String
@@ -26,52 +27,7 @@ const selectedPeopleUrl = computed(() => {
     return `https://swapi.dev/api/people/${props.id}`;
 });
 
-
-const relatedEntitiesCol = computed(() => {
-    return ['residents', 'films'];
-});
-
-watch(
-    () => store.entity,
-    () => {
-        fetchRelatedEntities();
-    }
-);
-
-onMounted(() => {
-    store.isFetchingDetails = true;
-    fetchPeople(selectedPeopleUrl.value);
-});
-
-function fetchPeople(url : string) {
-    store.fetchEntityDetails(url);
-}
-
-function fetchRelatedEntities() {
-    for (let key in store.selectedEntity) {
-        if ((relatedEntitiesCol.value.includes(key))) {
-            fetchRelatedEntityName(store.selectedEntity[key], key);
-        }
-    }
-}
-
-async function fetchRelatedEntityName(url: object, key : string) {
-    let relatedEntities = [];
-    for (let property in url) {
-        let individualUrl = url[property];
-        try {
-            let res = await store.fetchRelatedEntityDetails(individualUrl);
-            let fetchedEntity = res.data;
-            relatedEntities.push(fetchedEntity);
-        } catch (error) {
-            console.error('fetching related entities details failed', error);
-        } finally {
-            store.isFetchingDetails = false;
-        }
-    }
-    store.entity[key] = relatedEntities;
-}
-
+const { isFetchingRelatedEntities } = useFetchRelatedEntities(selectedPeopleUrl);
 </script>
 <style>
 </style>
