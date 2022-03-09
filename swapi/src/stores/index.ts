@@ -30,7 +30,7 @@ export const useEntityStore = defineStore({
         fetchRelatedEntityDetails(url : string) {
             /*
                 fetches the related details of an entity
-                (residents, films, spaceships, etc.)
+                (residents, films, starships, etc.)
             */
             return axios.get(url);
         }

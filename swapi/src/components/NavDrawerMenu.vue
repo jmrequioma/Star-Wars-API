@@ -19,8 +19,10 @@
         />
         <v-list-item
             prepend-icon="mdi-rocket"
-            title="Spaceships"
-            value="spaceships"
+            title="Starships"
+            value="starships"
+            :to="{ name: 'starships' }"
+            :active="navItemIsActive('starships')"
         />
         <v-list-item
             prepend-icon="mdi-car-side"
@@ -64,6 +66,8 @@ function navItemIsActive(routeName : string) : boolean {
         return route.name == routeName || route.name == 'people details';
     } else if (routeName == 'films') {
         return route.name == routeName || route.name == 'film details';
+    } else if (routeName == 'starships') {
+        return route.name == routeName || route.name == 'starship details';
     }
     return false;
 }

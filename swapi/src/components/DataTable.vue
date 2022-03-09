@@ -114,7 +114,7 @@ function displayRelatedEntities(data : object, property : string) {
     if (property == 'residents' || property == 'vehicles'
         || property == 'species' || property == 'starships'
         || property == 'characters' || property == 'planets'
-        || property == 'homeworld') {
+        || property == 'homeworld' || property == 'pilots') {
         return data.name ? `${data.name}` : '';
     } else if (property == 'films') {
         return data.title ? `${data.title}` : '';
@@ -139,12 +139,14 @@ function relatedEntityLink(data : object) {
     }
     if (data.url) {
         let { entityId, entityName } = useExtractId(modifiedUrl);
-        if (entityName.value == 'people') {
+        if (entityName.value == 'people' || entityName.value == 'pilots') {
             link.name = 'people details';
         } else if (entityName.value == 'films') {
             link.name = 'film details';
         } else if (entityName.value == 'planets') {
             link.name = 'planet details';
+        } else if (entityName.value == 'starships') {
+            link.name = 'starship details';
         }
         link.params.id = entityId.value;
     }
@@ -168,6 +170,6 @@ function relatedEntityLink(data : object) {
     }
 
     td {
-        min-width: 150px;
+        min-width: 200px;
     }
 </style>

@@ -23,7 +23,7 @@ export const useFilmsStore = defineStore({
                     apiUrl += `?page=${this.page}`;
                 }
                 const res = await getAPI(apiUrl);
-                this.peopleCount = res.data.count;
+                this.filmsCount = res.data.count;
                 this.fetchedFilms.push(...res.data.results);
             } catch (error) {
                 console.error('fetching films failed', error);

@@ -18,7 +18,7 @@ export default [{
             name: 'film details',
             component: () => import('@/views/films/FilmDetails.vue'),
             meta: {
-                title: 'People Details - Star Wars API'
+                title: 'Film Details - Star Wars API'
             },
             props: true
         }
