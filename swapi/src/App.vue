@@ -16,6 +16,18 @@
                     @click.stop="drawer = !drawer"
                 />
             </template>
+            <v-spacer />
+            <div>
+                <v-switch
+                    v-model="toggleWookieEncoding"
+                    label="See Data in Wookie"
+                    color="white"
+                    value="white"
+                    class="toggle"
+                    hide-details
+                >
+                </v-switch>
+            </div>
         </v-app-bar>
         <v-main class="body">
             <v-container fluid>
@@ -41,6 +53,7 @@ type Events = {
 const emitter : Emitter<Events> = inject('emitter') as Emitter<Events>;
 const drawer = ref(false);
 const route = useRoute();
+const toggleWookieEncoding = ref(false);
 
 const appbarTitle = computed(() => {
     return route.name;
@@ -59,5 +72,9 @@ emitter.on('search', () => {
 
     .title {
         text-transform: capitalize;
+    }
+
+    .v-label {
+        color: white !important;
     }
 </style>

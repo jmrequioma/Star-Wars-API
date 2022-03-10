@@ -52,8 +52,6 @@
             :to="{ name: 'species' }"
             :active="navItemIsActive('species')"
         />
-
-
     </v-list>
 </template>
 <script setup lang="ts">
