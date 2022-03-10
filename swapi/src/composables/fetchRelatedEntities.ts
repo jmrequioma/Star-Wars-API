@@ -48,6 +48,8 @@ export function useFetchRelatedEntities(url : Ref) {
          */
         const relatedEntities = [];
         let modifiedUrl = url;
+        // check if url is just a string
+        // and not an object
         if (typeof(url) == 'string') {
             modifiedUrl = {
                 0: url
@@ -66,6 +68,8 @@ export function useFetchRelatedEntities(url : Ref) {
             }
         }
 
+        // set the data on the selected entity so it displays the related entities
+        // and user can click on those and be redirected
         store.entity[key] = relatedEntities;
     }
 
