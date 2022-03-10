@@ -24,7 +24,7 @@ const props = defineProps({
 const store = useEntityStore();
 
 const selectedPlanetUrl = computed(() => {
-    return `https://swapi.dev/api/planets/${props.id}`;
+    return `https://swapi.dev/api/planets/${props.id}/`;
 });
 
 const { isFetchingRelatedEntities } = useFetchRelatedEntities(selectedPlanetUrl);

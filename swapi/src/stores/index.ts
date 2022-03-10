@@ -5,8 +5,7 @@ export const useEntityStore = defineStore({
     id: 'entities',
     state: () => ({
         entity: null,
-        isFetchingDetails: false,
-        isFetchingRelatedEntities: true
+        isFetchingDetails: true
     }),
     getters: {
         selectedEntity: (state) => {
@@ -30,7 +29,7 @@ export const useEntityStore = defineStore({
         fetchRelatedEntityDetails(url : string) {
             /*
                 fetches the related details of an entity
-                (residents, films, spaceships, etc.)
+                (residents, films, starships, etc.)
             */
             return axios.get(url);
         }

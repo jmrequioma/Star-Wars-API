@@ -19,13 +19,17 @@
         />
         <v-list-item
             prepend-icon="mdi-rocket"
-            title="Spaceships"
-            value="spaceships"
+            title="Starships"
+            value="starships"
+            :to="{ name: 'starships' }"
+            :active="navItemIsActive('starships')"
         />
         <v-list-item
             prepend-icon="mdi-car-side"
             title="Vehicles"
             value="vehicles"
+            :to="{ name: 'vehicles' }"
+            :active="navItemIsActive('vehicles')"
         />
         <v-list-item
             prepend-icon="mdi-account-group"
@@ -36,13 +40,17 @@
         />
         <v-list-item
             prepend-icon="mdi-movie-roll"
-            title="Film"
-            value="film"
+            title="Films"
+            value="films"
+            :to="{ name: 'films' }"
+            :active="navItemIsActive('films')"
         />
         <v-list-item
             prepend-icon="mdi-dna"
             title="Species"
             value="species"
+            :to="{ name: 'species' }"
+            :active="navItemIsActive('species')"
         />
 
 
@@ -60,6 +68,14 @@ function navItemIsActive(routeName : string) : boolean {
         return route.name == routeName || route.name == 'planet details';
     } else if (routeName == 'people') {
         return route.name == routeName || route.name == 'people details';
+    } else if (routeName == 'films') {
+        return route.name == routeName || route.name == 'film details';
+    } else if (routeName == 'starships') {
+        return route.name == routeName || route.name == 'starship details';
+    } else if (routeName == 'vehicles') {
+        return route.name == routeName || route.name == 'vehicle details';
+    } else if (routeName == 'species') {
+        return route.name == routeName || route.name == 'specie details';
     }
     return false;
 }

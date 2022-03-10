@@ -14,8 +14,11 @@ export function useFetchRelatedEntities(url : Ref) {
     });
 
     onMounted(() => {
+        // unset the selected entity so it doesn't get displayed initially
+        store.entity = null;
         store.isFetchingDetails = true;
-        fetchPeople(url.value);
+        fetchSelectedEntity(url.value);
+        store.isFetchingDetails = false;
     });
 
     watch(
@@ -25,16 +28,17 @@ export function useFetchRelatedEntities(url : Ref) {
         }
     );
 
-    function fetchPeople(url : string) {
+    function fetchSelectedEntity(url : string) {
         store.fetchEntityDetails(url);
     }
 
-    function fetchRelatedEntities() {
+    async function fetchRelatedEntities() {
         for (const key in store.selectedEntity) {
             if ((relatedEntitiesCol.value.includes(key))) {
-                fetchRelatedEntityName(store.selectedEntity[key], key);
+                await fetchRelatedEntityName(store.selectedEntity[key], key);
             }
         }
+        isFetchingRelatedEntities.value = false;
     }
 
     async function fetchRelatedEntityName(url: object, key : string) {
@@ -42,22 +46,31 @@ export function useFetchRelatedEntities(url : Ref) {
          * fetches the related entities of fetched entity
          * and stores it
          */
-        isFetchingRelatedEntities.value = true;
         const relatedEntities = [];
-        for (const property in url) {
-            const individualUrl = url[property];
+        let modifiedUrl = url;
+        // check if url is just a string
+        // and not an object
+        if (typeof(url) == 'string') {
+            modifiedUrl = {
+                0: url
+            };
+        }
+
+        for (const property in modifiedUrl) {
+            isFetchingRelatedEntities.value = true;
+            const individualUrl = modifiedUrl[property];
             try {
                 const res = await store.fetchRelatedEntityDetails(individualUrl);
                 const fetchedEntity = res.data;
                 relatedEntities.push(fetchedEntity);
             } catch (error) {
                 console.error('fetching related entities details failed', error);
-            } finally {
-                store.isFetchingDetails = false;
             }
         }
+
+        // set the data on the selected entity so it displays the related entities
+        // and user can click on those and be redirected
         store.entity[key] = relatedEntities;
-        isFetchingRelatedEntities.value = false;
     }
 
     return {

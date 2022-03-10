@@ -6,7 +6,7 @@
                     <tr>
                         <template v-if="!showDetails">
                             <th>
-                                Name
+                                {{ headerDisplay }}
                             </th>
                         </template>
                         <template v-else>
@@ -28,7 +28,7 @@
                             @click="goToDetails(entity.url)"
                         >
                             <td>
-                                {{ entity.name }}
+                                {{ entity.name || entity.title }}
                             </td>
                         </tr>
                     </template>
@@ -69,10 +69,11 @@
 </template>
 <script setup lang="ts">
 import { computed, onMounted } from 'vue';
-import { useExtractId } from '@/composables/extractId';
 import { constants } from '@/lib/constants/index.js';
+import { useRoute } from 'vue-router';
+import { useExtractId } from '@/composables/extractId';
 
-
+const route = useRoute();
 const emit = defineEmits([
     'openDetails', 'fetchMore'
 ]);
@@ -85,6 +86,10 @@ defineProps({
 
 const relatedEntitiesCol = computed(() => {
     return constants.entities;
+});
+
+const headerDisplay = computed(() => {
+    return route.name == 'films' ? 'Title' : 'Name';
 });
 
 onMounted(() => {
@@ -106,10 +111,9 @@ function goToDetails(url : string) {
 }
 
 function displayRelatedEntities(data : object, property : string) {
-    if (property == 'residents' || property == 'vehicles'
-        || property == 'species' || property == 'starships') {
+    if (property != 'films') {
         return data.name ? `${data.name}` : '';
-    } else if (property == 'films') {
+    } else {
         return data.title ? `${data.title}` : '';
     }
 }
@@ -120,26 +124,36 @@ function relatedEntityLink(data : object) {
         for the related entity
     */
 
-    let link = {};
-    let routerLinkName = '';
-    if (data.url) {
-        const { entityId, entityName } = useExtractId(data.url);
-        if (entityName.value == 'people') {
-            routerLinkName = 'people details';
-        } else if (entityName.value == 'films') {
-            // routerLinkName = 'film details';
+    let link = {
+        name: '',
+        params: {
+            id: '1'
         }
-        link = {
-            name: routerLinkName,
-            params: {
-                id: entityId.value
-            }
-        };
+    };
+    let modifiedUrl = data.url;
+    if (typeof(data.url) == 'string') {
+        modifiedUrl = data.url;
+    }
+    if (data.url) {
+        let { entityId, entityName } = useExtractId(modifiedUrl);
+        if (entityName.value == 'people' || entityName.value == 'pilots') {
+            link.name = 'people details';
+        } else if (entityName.value == 'films') {
+            link.name = 'film details';
+        } else if (entityName.value == 'planets') {
+            link.name = 'planet details';
+        } else if (entityName.value == 'starships') {
+            link.name = 'starship details';
+        } else if (entityName.value == 'vehicles') {
+            link.name = 'vehicle details';
+        } else if (entityName.value == 'species') {
+            link.name = 'specie details';
+        }
+        link.params.id = entityId.value;
     }
 
     return link;
 }
-
 </script>
 <style lang="scss">
     .table-container {
@@ -157,6 +171,6 @@ function relatedEntityLink(data : object) {
     }
 
     td {
-        min-width: 150px;
+        min-width: 200px;
     }
 </style>
