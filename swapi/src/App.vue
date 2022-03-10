@@ -17,16 +17,18 @@
                 />
             </template>
             <v-spacer />
-            <div>
+            <div
+                class="d-flex justify-center mr-2"
+            >
                 <v-switch
-                    v-model="toggleWookieEncoding"
-                    label="See Data in Wookie"
-                    color="white"
-                    value="white"
+                    v-model="store.isWookieeEncoding"
                     class="toggle"
                     hide-details
                 >
                 </v-switch>
+                <div class="mt-4">
+                    <p>See Details in Wookiee</p>
+                </div>
             </div>
         </v-app-bar>
         <v-main class="body">
@@ -42,6 +44,7 @@
 import { inject, ref, computed } from 'vue';
 import { useRoute } from 'vue-router';
 import type { Emitter } from 'mitt';
+import { useAppStore } from './stores/app';
 
 import NavDrawerMenu from './components/NavDrawerMenu.vue';
 import SiteFooter from './components/SiteFooter.vue';
@@ -53,7 +56,7 @@ type Events = {
 const emitter : Emitter<Events> = inject('emitter') as Emitter<Events>;
 const drawer = ref(false);
 const route = useRoute();
-const toggleWookieEncoding = ref(false);
+const store = useAppStore();
 
 const appbarTitle = computed(() => {
     return route.name;
@@ -65,7 +68,7 @@ emitter.on('search', () => {
     drawer.value = true;
 });
 </script>
-<style>
+<style scoped lang="scss">
     .body {
         height: 100vh;
     }
@@ -74,7 +77,11 @@ emitter.on('search', () => {
         text-transform: capitalize;
     }
 
-    .v-label {
+    .toggle {
         color: white !important;
+    }
+
+    .input__label {
+        color: white;
     }
 </style>

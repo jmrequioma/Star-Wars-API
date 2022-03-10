@@ -1,4 +1,5 @@
 export const constants = {
+    baseUrl: 'https://swapi.dev/api/',
     socialLinks: [
         {
             site: 'instagram',
@@ -17,5 +18,11 @@ export const constants = {
         'residents', 'films', 'vehicles', 'species',
         'starships', 'characters', 'planets', 'homeworld',
         'pilots', 'people'
+    ],
+
+    wookieeEntities: [
+        'rcwocahwawowhaoc', 'wwahanscc', 'howoacahoaanwoc', 'cakwooaahwoc',
+        'caorarccacahakc', 'oaacrarcraoaaoworcc', 'akanrawhwoaoc', 'acooscwoohoorcanwa',
+        'akahanooaoc', 'akwoooakanwo'
     ]
 };

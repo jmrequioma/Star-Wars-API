@@ -25,10 +25,10 @@
                         <tr
                             v-for="entity in entities"
                             :key="entity.name"
-                            @click="goToDetails(entity.url)"
+                            @click="goToDetails(entity.url || entity.hurcan)"
                         >
                             <td>
-                                {{ entity.name || entity.title }}
+                                {{ entity.name || entity.title || entity.whrascwo || entity.aoahaoanwo }}
                             </td>
                         </tr>
                     </template>
@@ -53,7 +53,7 @@
                                         </div>
                                     </template>
                                     <template v-else>
-                                        None
+                                        {{ noneDisplay }}
                                     </template>
                                 </template>
                                 <template v-else>
@@ -72,11 +72,14 @@ import { computed, onMounted } from 'vue';
 import { constants } from '@/lib/constants/index.js';
 import { useRoute } from 'vue-router';
 import { useExtractId } from '@/composables/extractId';
+import { useAppStore } from '@/stores/app';
 
 const route = useRoute();
 const emit = defineEmits([
     'openDetails', 'fetchMore'
 ]);
+
+const appStore = useAppStore();
 
 defineProps({
     showDetails: Boolean,
@@ -85,11 +88,15 @@ defineProps({
 });
 
 const relatedEntitiesCol = computed(() => {
-    return constants.entities;
+    return constants.entities.concat(constants.wookieeEntities);
 });
 
 const headerDisplay = computed(() => {
     return route.name == 'films' ? 'Title' : 'Name';
+});
+
+const noneDisplay = computed(() => {
+    return appStore.isWookieeEncoding ? 'aaaaahnr' : 'None';
 });
 
 onMounted(() => {
@@ -111,10 +118,20 @@ function goToDetails(url : string) {
 }
 
 function displayRelatedEntities(data : object, property : string) {
-    if (property != 'films') {
-        return data.name ? `${data.name}` : '';
+    if (!appStore.isWookieeEncoding) {
+        if (property != 'films') {
+            return data.name ? `${data.name}` : '';
+        } else {
+            return data.title ? `${data.title}` : '';
+        }
     } else {
-        return data.title ? `${data.title}` : '';
+        // films
+        if (property != 'wwahanscc') {
+            return data.whrascwo ? `${data.whrascwo}` : '';
+        } else {
+            // title
+            return data.aoahaoanwo ? `${data.aoahaoanwo}` : '';
+        }
     }
 }
 
@@ -130,23 +147,23 @@ function relatedEntityLink(data : object) {
             id: '1'
         }
     };
-    let modifiedUrl = data.url;
-    if (typeof(data.url) == 'string') {
-        modifiedUrl = data.url;
-    }
-    if (data.url) {
-        let { entityId, entityName } = useExtractId(modifiedUrl);
-        if (entityName.value == 'people' || entityName.value == 'pilots') {
+
+    if (data.url || data.hurcan) {
+        // TODO: add logic to check for these constants
+        let { entityId, entityName } = useExtractId(data.url || data.hurcan);
+        if (entityName.value == 'people' || entityName.value == 'pilots'
+            || entityName.value == 'akwoooakanwo' || entityName.value == 'akahanooaoc'
+            || entityName.value == 'oaacrarcraoaaoworcc') {
             link.name = 'people details';
-        } else if (entityName.value == 'films') {
+        } else if (entityName.value == 'films' || entityName.value == 'wwahanscc') {
             link.name = 'film details';
-        } else if (entityName.value == 'planets') {
+        } else if (entityName.value == 'planets' || entityName.value == 'akanrawhwoaoc') {
             link.name = 'planet details';
-        } else if (entityName.value == 'starships') {
+        } else if (entityName.value == 'starships' || entityName.value == 'caorarccacahakc') {
             link.name = 'starship details';
-        } else if (entityName.value == 'vehicles') {
+        } else if (entityName.value == 'vehicles' || entityName.value == 'howoacahoaanwoc') {
             link.name = 'vehicle details';
-        } else if (entityName.value == 'species') {
+        } else if (entityName.value == 'species' || entityName.value == 'cakwooaahwoc') {
             link.name = 'specie details';
         }
         link.params.id = entityId.value;

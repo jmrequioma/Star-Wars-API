@@ -13,7 +13,9 @@ import DataTable from '@/components/DataTable.vue';
 import PageLoader from '@/components/PageLoader.vue';
 
 import { useEntityStore } from '@/stores/index';
+import { useAppStore } from '@/stores/app';
 import { useFetchRelatedEntities } from '@/composables/fetchRelatedEntities';
+import { constants } from '@/lib/constants/index.js';
 
 import { computed } from 'vue';
 
@@ -22,9 +24,11 @@ const props = defineProps({
 });
 
 const store = useEntityStore();
+const appStore = useAppStore();
 
 const selectedPeopleUrl = computed(() => {
-    return `https://swapi.dev/api/people/${props.id}/`;
+    let api = `${constants.baseUrl}people/${props.id}/`;
+    return  appStore.isWookieeEncoding ? `${api}?format=wookiee` : api;
 });
 
 const { isFetchingRelatedEntities } = useFetchRelatedEntities(selectedPeopleUrl);
