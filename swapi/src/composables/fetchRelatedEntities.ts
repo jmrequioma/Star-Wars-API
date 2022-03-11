@@ -29,12 +29,12 @@ export function useFetchRelatedEntities(url : Ref) {
         }
     );
 
-    watch(
-        () => store.entity,
-        () => {
-            fetchRelatedEntities();
-        }
-    );
+    // watch(
+    //     () => store.entity,
+    //     () => {
+    //         fetchRelatedEntities();
+    //     }
+    // );
 
     function fetchSelectedEntity(url : string) {
         // unset the selected entity so it doesn't get displayed initially

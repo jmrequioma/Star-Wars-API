@@ -48,9 +48,9 @@
                                             class="related-entity-data"
                                         >
                                             <router-link
-                                                :to="relatedEntityLink(data)"
+                                                :to="relatedEntityLink(data, key)"
                                             >
-                                                {{ displayRelatedEntities(data, property) }}
+                                                {{ data }}
                                             </router-link>
                                         </div>
                                     </template>
@@ -152,7 +152,7 @@ function displayRelatedEntities(data : object, property : string) {
     }
 }
 
-function relatedEntityLink(data : object) {
+function relatedEntityLink(data : object, key : object) {
     /*
         returns the router link
         for the related entity
@@ -164,10 +164,14 @@ function relatedEntityLink(data : object) {
             id: '1'
         }
     };
-
-
+    let modifiedUrl = data;
+    if (typeof(key) == 'string') {
+        modifiedUrl = key;
+    }
+    // console.log(data, key);
+    console.log('modified url: ----------', modifiedUrl);
     if (data.url || data.hurcan) {
-        let { entityId, entityName } = useExtractId(data.url || data.hurcan);
+        let { entityId, entityName } = useExtractId(modifiedUrl);
         const translatedWookieeWord = translateWookieeToEnglish(entityName.value);
         if (entityName.value == 'people' || translatedWookieeWord == 'people') {
             link.name = 'people details';
@@ -183,6 +187,7 @@ function relatedEntityLink(data : object) {
             link.name = 'specie details';
         }
         link.params.id = entityId.value;
+        console.log('link-----------', link);
     }
 
     return link;
