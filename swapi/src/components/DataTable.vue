@@ -5,7 +5,9 @@
                 <thead>
                     <tr>
                         <template v-if="!showDetails">
-                            <th>
+                            <th
+                                class="table-header"
+                            >
                                 {{ headerDisplay }}
                             </th>
                         </template>
@@ -28,7 +30,7 @@
                             @click="goToDetails(entity.url || entity.hurcan)"
                         >
                             <td>
-                                {{ entity.name || entity.title || entity.whrascwo || entity.aoahaoanwo }}
+                                {{ displayData(entity) }}
                             </td>
                         </tr>
                     </template>
@@ -73,6 +75,7 @@ import { constants } from '@/lib/constants/index.js';
 import { useRoute } from 'vue-router';
 import { useExtractId } from '@/composables/extractId';
 import { useAppStore } from '@/stores/app';
+import { useTranslateWookiee } from '@/composables/translateWookiee';
 
 const route = useRoute();
 const emit = defineEmits([
@@ -81,7 +84,7 @@ const emit = defineEmits([
 
 const appStore = useAppStore();
 
-defineProps({
+const props = defineProps({
     showDetails: Boolean,
     entities: Array,
     selectedEntity: Object
@@ -92,12 +95,20 @@ const relatedEntitiesCol = computed(() => {
 });
 
 const headerDisplay = computed(() => {
-    return route.name == 'films' ? 'Title' : 'Name';
+    if (!appStore.isWookieeEncoding) {
+        return route.name == 'films' ? 'Title' : 'Name';
+    } else {
+        let title = translateEnglishToWookie('title');
+        let name = translateEnglishToWookie('name');
+        return route.name == 'films' ? title : name;
+    }
 });
 
 const noneDisplay = computed(() => {
-    return appStore.isWookieeEncoding ? 'aaaaahnr' : 'None';
+    return appStore.isWookieeEncoding ? '' : 'None';
 });
+
+const { translateWookieeToEnglish, translateEnglishToWookie } = useTranslateWookiee();
 
 onMounted(() => {
     const listElm = document.querySelector('.table-container');
@@ -148,28 +159,44 @@ function relatedEntityLink(data : object) {
         }
     };
 
+
     if (data.url || data.hurcan) {
-        // TODO: add logic to check for these constants
         let { entityId, entityName } = useExtractId(data.url || data.hurcan);
-        if (entityName.value == 'people' || entityName.value == 'pilots'
-            || entityName.value == 'akwoooakanwo' || entityName.value == 'akahanooaoc'
-            || entityName.value == 'oaacrarcraoaaoworcc') {
+        const translatedWookieeWord = translateWookieeToEnglish(entityName.value);
+        if (entityName.value == 'people' || translatedWookieeWord == 'people') {
             link.name = 'people details';
-        } else if (entityName.value == 'films' || entityName.value == 'wwahanscc') {
+        } else if (entityName.value == 'films' || translatedWookieeWord == 'films') {
             link.name = 'film details';
-        } else if (entityName.value == 'planets' || entityName.value == 'akanrawhwoaoc') {
+        } else if (entityName.value == 'planets' || translatedWookieeWord == 'planets') {
             link.name = 'planet details';
-        } else if (entityName.value == 'starships' || entityName.value == 'caorarccacahakc') {
+        } else if (entityName.value == 'starships' || translatedWookieeWord == 'starships') {
             link.name = 'starship details';
-        } else if (entityName.value == 'vehicles' || entityName.value == 'howoacahoaanwoc') {
+        } else if (entityName.value == 'vehicles' || translatedWookieeWord == 'vehicles') {
             link.name = 'vehicle details';
-        } else if (entityName.value == 'species' || entityName.value == 'cakwooaahwoc') {
+        } else if (entityName.value == 'species' || translatedWookieeWord == 'species') {
             link.name = 'specie details';
         }
         link.params.id = entityId.value;
     }
 
     return link;
+}
+
+function displayData(entity : object) {
+    if (!appStore.isWookieeEncoding) {
+        return entity.name || entity.title;
+    } else {
+        let name = translateEnglishToWookie('name');
+        let title = translateEnglishToWookie('title');
+        // find for the name and title in wookiee since
+        // the object has wookiee properties
+        for (let property in entity) {
+            if (name == property || title == property) {
+                return entity[property];
+            }
+        }
+        return '';
+    }
 }
 </script>
 <style lang="scss">

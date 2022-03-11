@@ -3,6 +3,7 @@ import { useEntityStore } from '@/stores/index';
 import { useAppStore } from '@/stores/app';
 import { constants } from '@/lib/constants/index.js';
 import { useExtractId } from './extractId';
+import { useTranslateWookiee } from './translateWookiee';
 
 export function useFetchRelatedEntities(url : Ref) {
 
@@ -10,6 +11,7 @@ export function useFetchRelatedEntities(url : Ref) {
     const appStore = useAppStore();
     const isFetchingRelatedEntities = ref(false);
 
+    const { translateWookieeToEnglish } = useTranslateWookiee();
     const relatedEntitiesCol = computed(() => {
         return constants.entities.concat(constants.wookieeEntities);
     });
@@ -103,23 +105,12 @@ export function useFetchRelatedEntities(url : Ref) {
     function convertWookieeUrl(wookieeUrl : string) {
         const { entityId, entityName } = useExtractId(wookieeUrl);
 
-        // TODO: add logic to check for these constants
-        if (entityName.value == 'rcwocahwawowhaoc' || entityName.value == 'akwoooakanwo'
-        || entityName.value == 'oaacrarcraoaaoworcc') {
-            entityName.value = 'people';
-        } else if (entityName.value == 'wwahanscc') {
-            entityName.value = 'films';
-        } else if (entityName.value == 'cakwooaahwoc') {
-            entityName.value = 'species';
-        } else if (entityName.value == 'akanrawhwoaoc') {
-            entityName.value = 'planets';
-        } else if (entityName.value == 'caorarccacahakc') {
-            entityName.value = 'starships';
-        } else if (entityName.value == 'howoacahoaanwoc') {
-            entityName.value = 'vehicles';
-        }
+        // entityName.value here will be an extracted wookiee word since
+        // the url is in wookiee, we pass said url to the translator
 
-        return `${constants.baseUrl}${entityName.value}/${entityId.value}/?format=wookiee`;
+        const translatedWookieWord = translateWookieeToEnglish(entityName.value);
+
+        return `${constants.baseUrl}${translatedWookieWord}/${entityId.value}/?format=wookiee`;
     }
 
     return {
