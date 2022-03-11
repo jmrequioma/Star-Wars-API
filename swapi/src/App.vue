@@ -27,7 +27,7 @@
                 >
                 </v-switch>
                 <div class="mt-4">
-                    <p>See Details in Wookiee</p>
+                    <p>See Data in Wookiee</p>
                 </div>
             </div>
         </v-app-bar>
