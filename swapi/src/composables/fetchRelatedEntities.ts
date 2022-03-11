@@ -38,7 +38,6 @@ export function useFetchRelatedEntities(url : Ref) {
         // unset the selected entity so it doesn't get displayed initially
         store.entity = null;
         if (appStore.isWookieeEncoding) {
-            console.log('url----------', url);
             store.fetchWookieeEntityDetails(url);
         } else {
             store.fetchEntityDetails(url);
@@ -79,7 +78,6 @@ export function useFetchRelatedEntities(url : Ref) {
                 individualUrl = convertWookieeUrl(modifiedUrl[property]);
                 try {
                     const res = await store.fetchRelatedWookieEntities(individualUrl);
-                    console.log(res);
                     const fetchedEntity = res;
                     relatedEntities.push(fetchedEntity);
                 } catch (error) {
@@ -89,7 +87,6 @@ export function useFetchRelatedEntities(url : Ref) {
                 individualUrl = modifiedUrl[property];
                 try {
                     const res = await store.fetchRelatedEntityDetails(individualUrl);
-                    console.log(res);
                     const fetchedEntity = res.data;
                     relatedEntities.push(fetchedEntity);
                 } catch (error) {

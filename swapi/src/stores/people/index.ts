@@ -1,5 +1,6 @@
 import { defineStore } from 'pinia';
 import getAPI from '@/lib/axios-api.js';
+import { constants } from '@/lib/constants/index.js';
 
 export const usePeopleStore = defineStore({
     id: 'people',
@@ -27,6 +28,31 @@ export const usePeopleStore = defineStore({
                 this.fetchedPeople.push(...res.data.results);
             } catch (error) {
                 console.error('fetching people failed', error);
+            } finally {
+                this.isFetchingPeople = false;
+            }
+        },
+
+        async fetchWookieePeople() {
+            // get people from swapi with wookiee
+            try {
+                let apiUrl = `${constants.baseUrl}people/?format=wookiee`;
+                if (this.page > 1) {
+                    apiUrl += `&page=${this.page}`;
+                }
+                fetch(apiUrl)
+                    .then(response => {
+                        return response.text().then((text) => {
+                            text = text.replace(/whhuanan/g, '"whhuanan"');
+                            return JSON.parse(text);
+                        });
+                    })
+                    .then(data => {
+                        this.fetchedPeople.push(...data.rcwochuanaoc);
+                        this.peopleCount = data.oaoohuwhao;
+                    });
+            } catch (error) {
+                console.error('fetching people in wookiee failed', error);
             } finally {
                 this.isFetchingPeople = false;
             }

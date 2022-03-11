@@ -11,8 +11,9 @@
     </div>
 </template>
 <script setup lang="ts">
-import { onMounted } from 'vue';
+import { onMounted, watch } from 'vue';
 import { useSpeciesStore } from '@/stores/species';
+import { useAppStore } from '@/stores/app';
 import { useRouter } from 'vue-router';
 import { useExtractId } from '@/composables/extractId';
 
@@ -20,6 +21,7 @@ import DataTable from '@/components/DataTable.vue';
 import PageLoaderVue from '@/components/PageLoader.vue';
 
 const store = useSpeciesStore();
+const appStore = useAppStore();
 const router = useRouter();
 
 onMounted(() => {
@@ -30,8 +32,24 @@ onMounted(() => {
     }
 });
 
+watch(
+    () => appStore.isWookieeEncoding,
+    () => {
+        // reset the state if translation
+        // is needed
+        store.isFetchingSpecies = true;
+        store.page = 1;
+        store.fetchedSpecies = [];
+        getSpecies();
+    }
+);
+
 function getSpecies() {
-    store.fetchSpecies();
+    if (!appStore.isWookieeEncoding) {
+        store.fetchSpecies();
+    } else {
+        store.fetchSpecies();
+    }
 }
 
 function openDetails(url : string) {
