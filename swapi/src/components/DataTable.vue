@@ -84,7 +84,7 @@ const emit = defineEmits([
 
 const appStore = useAppStore();
 
-const props = defineProps({
+defineProps({
     showDetails: Boolean,
     entities: Array,
     selectedEntity: Object
@@ -131,17 +131,23 @@ function goToDetails(url : string) {
 function displayRelatedEntities(data : object, property : string) {
     if (!appStore.isWookieeEncoding) {
         if (property != 'films') {
-            return data.name ? `${data.name}` : '';
+            return data.name || '';
         } else {
-            return data.title ? `${data.title}` : '';
+            return data.title || '';
         }
     } else {
         // films
-        if (property != 'wwahanscc') {
-            return data.whrascwo ? `${data.whrascwo}` : '';
+        let films = translateEnglishToWookie('films');
+        if (property != films) {
+            // name
+            let name = translateEnglishToWookie('name');
+
+            return findValue(data, name);
         } else {
             // title
-            return data.aoahaoanwo ? `${data.aoahaoanwo}` : '';
+            let title = translateEnglishToWookie('title');
+
+            return findValue(data, title);
         }
     }
 }
@@ -197,6 +203,20 @@ function displayData(entity : object) {
         }
         return '';
     }
+}
+
+function findValue(entity : object, toFind : string) {
+    /**
+     * @param {object} entity entity to loop through
+     * @param {string} toFind word to find within the entity
+     */
+    for (let property in entity) {
+        if (toFind == property) {
+            return entity[property] || '';
+        }
+    }
+    return null;
+
 }
 </script>
 <style lang="scss">
