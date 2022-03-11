@@ -48,7 +48,7 @@ function getSpecies() {
     if (!appStore.isWookieeEncoding) {
         store.fetchSpecies();
     } else {
-        store.fetchSpecies();
+        store.fetchWookieeSpecies();
     }
 }
 
