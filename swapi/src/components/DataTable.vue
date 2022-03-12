@@ -152,7 +152,7 @@ function displayRelatedEntities(data : object, property : string) {
     }
 }
 
-function relatedEntityLink(data : object, key : object) {
+function relatedEntityLink(url : string, key : object) {
     /*
         returns the router link
         for the related entity
@@ -164,13 +164,11 @@ function relatedEntityLink(data : object, key : object) {
             id: '1'
         }
     };
-    let modifiedUrl = data;
+    let modifiedUrl = url;
     if (typeof(key) == 'string') {
         modifiedUrl = key;
     }
-    // console.log(data, key);
-    console.log('modified url: ----------', modifiedUrl);
-    if (data.url || data.hurcan) {
+    if (modifiedUrl) {
         let { entityId, entityName } = useExtractId(modifiedUrl);
         const translatedWookieeWord = translateWookieeToEnglish(entityName.value);
         if (entityName.value == 'people' || translatedWookieeWord == 'people') {
@@ -187,7 +185,6 @@ function relatedEntityLink(data : object, key : object) {
             link.name = 'specie details';
         }
         link.params.id = entityId.value;
-        console.log('link-----------', link);
     }
 
     return link;
