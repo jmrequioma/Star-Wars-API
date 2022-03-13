@@ -48,15 +48,15 @@ export function useFetchRelatedEntities(url : Ref) {
          * converts the string found on
          * related entities columns to an array
          */
-        const homeworldList = [];
+        const convertedList = [];
         for (const key in store.entity) {
             if (relatedEntitiesCol.value.includes(key) &&
                 typeof(store.entity[key]) == 'string') {
                 // push this into an array and make it
                 // the new value so we can loop through
                 // it on the DataTable Component
-                homeworldList.push(store.entity[key]);
-                store.entity[key] = homeworldList;
+                convertedList.push(store.entity[key]);
+                store.entity[key] = convertedList;
             }
         }
     }
