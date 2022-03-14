@@ -1,76 +1,64 @@
 import { ref, watch, computed, onMounted, type Ref } from 'vue';
 import { useEntityStore } from '@/stores/index';
+import { useAppStore } from '@/stores/app';
 import { constants } from '@/lib/constants/index.js';
-
-
 
 export function useFetchRelatedEntities(url : Ref) {
 
     const store = useEntityStore();
+    const appStore = useAppStore();
     const isFetchingRelatedEntities = ref(false);
 
     const relatedEntitiesCol = computed(() => {
-        return constants.entities;
+        return constants.entities.concat(constants.wookieeEntities);
     });
 
     onMounted(() => {
-        // unset the selected entity so it doesn't get displayed initially
-        store.entity = null;
         store.isFetchingDetails = true;
         fetchSelectedEntity(url.value);
         store.isFetchingDetails = false;
     });
 
     watch(
+        () => url.value,
+        () => {
+            fetchSelectedEntity(url.value);
+        }
+    );
+
+    watch(
         () => store.entity,
         () => {
-            fetchRelatedEntities();
+            convertToArray();
         }
     );
 
     function fetchSelectedEntity(url : string) {
-        store.fetchEntityDetails(url);
-    }
-
-    async function fetchRelatedEntities() {
-        for (const key in store.selectedEntity) {
-            if ((relatedEntitiesCol.value.includes(key))) {
-                await fetchRelatedEntityName(store.selectedEntity[key], key);
-            }
+        // unset the selected entity so it doesn't get displayed initially
+        store.entity = null;
+        if (appStore.isWookieeEncoding) {
+            store.fetchWookieeEntityDetails(url);
+        } else {
+            store.fetchEntityDetails(url);
         }
-        isFetchingRelatedEntities.value = false;
     }
 
-    async function fetchRelatedEntityName(url: object, key : string) {
+    function convertToArray() {
         /**
-         * fetches the related entities of fetched entity
-         * and stores it
+         * converts the string found on
+         * related entities columns to an array
          */
-        const relatedEntities = [];
-        let modifiedUrl = url;
-        // check if url is just a string
-        // and not an object
-        if (typeof(url) == 'string') {
-            modifiedUrl = {
-                0: url
-            };
-        }
-
-        for (const property in modifiedUrl) {
-            isFetchingRelatedEntities.value = true;
-            const individualUrl = modifiedUrl[property];
-            try {
-                const res = await store.fetchRelatedEntityDetails(individualUrl);
-                const fetchedEntity = res.data;
-                relatedEntities.push(fetchedEntity);
-            } catch (error) {
-                console.error('fetching related entities details failed', error);
+        const convertedList = [];
+        for (const key in store.entity) {
+            if (relatedEntitiesCol.value.includes(key) &&
+                typeof(store.entity[key]) == 'string') {
+                // push this into an array and make it
+                // the new value so we can loop through
+                // it on the DataTable Component
+                convertedList.push(store.entity[key]);
+                store.entity[key] = convertedList;
             }
         }
-
-        // set the data on the selected entity so it displays the related entities
-        // and user can click on those and be redirected
-        store.entity[key] = relatedEntities;
     }
 
     return {

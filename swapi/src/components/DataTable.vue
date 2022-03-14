@@ -5,7 +5,9 @@
                 <thead>
                     <tr>
                         <template v-if="!showDetails">
-                            <th>
+                            <th
+                                class="table-header"
+                            >
                                 {{ headerDisplay }}
                             </th>
                         </template>
@@ -25,10 +27,10 @@
                         <tr
                             v-for="entity in entities"
                             :key="entity.name"
-                            @click="goToDetails(entity.url)"
+                            @click="goToDetails(entity.url || entity.hurcan)"
                         >
                             <td>
-                                {{ entity.name || entity.title }}
+                                {{ displayData(entity) }}
                             </td>
                         </tr>
                     </template>
@@ -46,14 +48,14 @@
                                             class="related-entity-data"
                                         >
                                             <router-link
-                                                :to="relatedEntityLink(data)"
+                                                :to="relatedEntityLink(data, key)"
                                             >
-                                                {{ displayRelatedEntities(data, property) }}
+                                                {{ data }}
                                             </router-link>
                                         </div>
                                     </template>
                                     <template v-else>
-                                        None
+                                        {{ noneDisplay }}
                                     </template>
                                 </template>
                                 <template v-else>
@@ -72,11 +74,15 @@ import { computed, onMounted } from 'vue';
 import { constants } from '@/lib/constants/index.js';
 import { useRoute } from 'vue-router';
 import { useExtractId } from '@/composables/extractId';
+import { useAppStore } from '@/stores/app';
+import { useTranslateWookiee } from '@/composables/translateWookiee';
 
 const route = useRoute();
 const emit = defineEmits([
     'openDetails', 'fetchMore'
 ]);
+
+const appStore = useAppStore();
 
 defineProps({
     showDetails: Boolean,
@@ -85,12 +91,24 @@ defineProps({
 });
 
 const relatedEntitiesCol = computed(() => {
-    return constants.entities;
+    return constants.entities.concat(constants.wookieeEntities);
 });
 
 const headerDisplay = computed(() => {
-    return route.name == 'films' ? 'Title' : 'Name';
+    if (!appStore.isWookieeEncoding) {
+        return route.name == 'films' ? 'Title' : 'Name';
+    } else {
+        let title = translateEnglishToWookie('title');
+        let name = translateEnglishToWookie('name');
+        return route.name == 'films' ? title : name;
+    }
 });
+
+const noneDisplay = computed(() => {
+    return appStore.isWookieeEncoding ? '' : 'None';
+});
+
+const { translateWookieeToEnglish, translateEnglishToWookie } = useTranslateWookiee();
 
 onMounted(() => {
     const listElm = document.querySelector('.table-container');
@@ -110,15 +128,7 @@ function goToDetails(url : string) {
     emit('openDetails', url);
 }
 
-function displayRelatedEntities(data : object, property : string) {
-    if (property != 'films') {
-        return data.name ? `${data.name}` : '';
-    } else {
-        return data.title ? `${data.title}` : '';
-    }
-}
-
-function relatedEntityLink(data : object) {
+function relatedEntityLink(url : string, key : object) {
     /*
         returns the router link
         for the related entity
@@ -130,29 +140,47 @@ function relatedEntityLink(data : object) {
             id: '1'
         }
     };
-    let modifiedUrl = data.url;
-    if (typeof(data.url) == 'string') {
-        modifiedUrl = data.url;
+    let modifiedUrl = url;
+    if (typeof(key) == 'string') {
+        modifiedUrl = key;
     }
-    if (data.url) {
+    if (modifiedUrl) {
         let { entityId, entityName } = useExtractId(modifiedUrl);
-        if (entityName.value == 'people' || entityName.value == 'pilots') {
+        const translatedWookieeWord = translateWookieeToEnglish(entityName.value);
+        if (entityName.value == 'people' || translatedWookieeWord == 'people') {
             link.name = 'people details';
-        } else if (entityName.value == 'films') {
+        } else if (entityName.value == 'films' || translatedWookieeWord == 'films') {
             link.name = 'film details';
-        } else if (entityName.value == 'planets') {
+        } else if (entityName.value == 'planets' || translatedWookieeWord == 'planets') {
             link.name = 'planet details';
-        } else if (entityName.value == 'starships') {
+        } else if (entityName.value == 'starships' || translatedWookieeWord == 'starships') {
             link.name = 'starship details';
-        } else if (entityName.value == 'vehicles') {
+        } else if (entityName.value == 'vehicles' || translatedWookieeWord == 'vehicles') {
             link.name = 'vehicle details';
-        } else if (entityName.value == 'species') {
+        } else if (entityName.value == 'species' || translatedWookieeWord == 'species') {
             link.name = 'specie details';
         }
         link.params.id = entityId.value;
     }
 
     return link;
+}
+
+function displayData(entity : object) {
+    if (!appStore.isWookieeEncoding) {
+        return entity.name || entity.title;
+    } else {
+        let name = translateEnglishToWookie('name');
+        let title = translateEnglishToWookie('title');
+        // find for the name and title in wookiee since
+        // the object has wookiee properties
+        for (let property in entity) {
+            if (name == property || title == property) {
+                return entity[property];
+            }
+        }
+        return '';
+    }
 }
 </script>
 <style lang="scss">

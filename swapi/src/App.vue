@@ -16,6 +16,20 @@
                     @click.stop="drawer = !drawer"
                 />
             </template>
+            <v-spacer />
+            <div
+                class="d-flex justify-center mr-2"
+            >
+                <v-switch
+                    v-model="store.isWookieeEncoding"
+                    class="toggle"
+                    hide-details
+                >
+                </v-switch>
+                <div class="mt-4">
+                    <p>See Data in Wookiee</p>
+                </div>
+            </div>
         </v-app-bar>
         <v-main class="body">
             <v-container fluid>
@@ -30,6 +44,7 @@
 import { inject, ref, computed } from 'vue';
 import { useRoute } from 'vue-router';
 import type { Emitter } from 'mitt';
+import { useAppStore } from './stores/app';
 
 import NavDrawerMenu from './components/NavDrawerMenu.vue';
 import SiteFooter from './components/SiteFooter.vue';
@@ -41,6 +56,7 @@ type Events = {
 const emitter : Emitter<Events> = inject('emitter') as Emitter<Events>;
 const drawer = ref(false);
 const route = useRoute();
+const store = useAppStore();
 
 const appbarTitle = computed(() => {
     return route.name;
@@ -52,12 +68,20 @@ emitter.on('search', () => {
     drawer.value = true;
 });
 </script>
-<style>
+<style scoped lang="scss">
     .body {
         height: 100vh;
     }
 
     .title {
         text-transform: capitalize;
+    }
+
+    .toggle {
+        color: white !important;
+    }
+
+    .input__label {
+        color: white;
     }
 </style>
