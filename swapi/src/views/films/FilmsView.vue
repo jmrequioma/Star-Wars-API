@@ -1,21 +1,39 @@
 <template>
+    <div class="input-container">
+        <v-text-field
+            v-model.trim="store.searchInput"
+            label="Search"
+            variant="outlined"
+            clearable
+            clear-icon="mdi-close"
+        />
+    </div>
     <div class="d-flex justify-center">
         <DataTable
-            v-if="!store.isFetchingFilms"
+            v-if="!store.isFetchingFilms && store.films.length"
             @open-details="openDetails"
             @fetch-more="fetchMore"
             :show-details="false"
             :entities="store.films"
         />
-        <PageLoaderVue v-else />
+        <PageLoaderVue v-else-if="store.isFetchingFilms" />
+        <div v-else-if="!store.isFetchingFilms && !store.films.length"
+            class="empty-state"
+        >
+            <v-icon>
+                mdi-magnify
+            </v-icon>
+            <p>No results found.</p>
+        </div>
     </div>
 </template>
 <script setup lang="ts">
-import { onMounted, watch } from 'vue';
+import { onMounted } from 'vue';
 import { useFilmsStore } from '@/stores/films';
 import { useAppStore } from '@/stores/app';
 import { useRouter } from 'vue-router';
 import { useExtractId } from '@/composables/extractId';
+import  { useDebouncedRef }  from '@/composables/debouncedRef';
 
 import DataTable from '@/components/DataTable.vue';
 import PageLoaderVue from '@/components/PageLoader.vue';
@@ -23,26 +41,30 @@ import PageLoaderVue from '@/components/PageLoader.vue';
 const store = useFilmsStore();
 const appStore = useAppStore();
 const router = useRouter();
+const { debounce } = useDebouncedRef();
 
 onMounted(() => {
-    if (!store.fetchedFilms.length) {
-        store.isFetchingFilms = true;
-        // fetch only if empty
+    resetState();
+    getFilms();
+});
+
+appStore.$subscribe((value) => {
+    // watch for a change in the toggle
+    if (value.events.key == 'isWookieeEncoding') {
+        resetState();
         getFilms();
     }
 });
 
-watch(
-    () => appStore.isWookieeEncoding,
-    () => {
-        // reset the state if translation
-        // is needed
-        store.isFetchingFilms = true;
-        store.page = 1;
-        store.fetchedFilms = [];
-        getFilms();
+store.$subscribe((value) => {
+    // watch for a change in the text field
+    if (value.events.key == 'searchInput') {
+        resetState();
+        debounce(() => {
+            getFilms();
+        }, 850);
     }
-);
+});
 
 function getFilms() {
     if (!appStore.isWookieeEncoding) {
@@ -72,6 +94,36 @@ function fetchMore() {
         getFilms();
     }
 }
+
+function resetState() {
+    /**
+     * resets the store
+     * to the original state
+     */
+
+    store.isFetchingFilms = true;
+    store.page = 1;
+    store.fetchedFilms = [];
+
+}
 </script>
-<style>
+<style scoped lang="scss">
+    .input-container {
+        padding-left: 10vw;
+        padding-right: 12vw;
+        position: sticky;
+        background-color: white;
+        z-index: 1;
+        width: 100%;
+    }
+
+    .empty-state {
+        text-align: center;
+        font-size: 32px;
+
+        p {
+            font-size: 16px;
+            font-weight: 300;
+        }
+    }
 </style>

@@ -1,6 +1,6 @@
 <template>
     <div class="table-container">
-        <v-table>
+        <v-table v-if="selectedEntity || entities?.length">
             <template v-slot:default>
                 <thead>
                     <tr>
@@ -128,30 +128,6 @@ function goToDetails(url : string) {
     emit('openDetails', url);
 }
 
-function displayRelatedEntities(data : object, property : string) {
-    if (!appStore.isWookieeEncoding) {
-        if (property != 'films') {
-            return data.name || '';
-        } else {
-            return data.title || '';
-        }
-    } else {
-        // films
-        let films = translateEnglishToWookie('films');
-        if (property != films) {
-            // name
-            let name = translateEnglishToWookie('name');
-
-            return findValue(data, name);
-        } else {
-            // title
-            let title = translateEnglishToWookie('title');
-
-            return findValue(data, title);
-        }
-    }
-}
-
 function relatedEntityLink(url : string, key : object) {
     /*
         returns the router link
@@ -205,20 +181,6 @@ function displayData(entity : object) {
         }
         return '';
     }
-}
-
-function findValue(entity : object, toFind : string) {
-    /**
-     * @param {object} entity entity to loop through
-     * @param {string} toFind word to find within the entity
-     */
-    for (let property in entity) {
-        if (toFind == property) {
-            return entity[property] || '';
-        }
-    }
-    return null;
-
 }
 </script>
 <style lang="scss">

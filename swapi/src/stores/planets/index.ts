@@ -7,6 +7,7 @@ export const usePlanetsStore = defineStore({
     state: () => ({
         fetchedPlanets: [],
         isFetchingPlanets: false,
+        searchInput: '',
         planetsCount: 0,
         page: 1
     }),
@@ -23,6 +24,10 @@ export const usePlanetsStore = defineStore({
                 if (this.page > 1) {
                     apiUrl += `?page=${this.page}`;
                 }
+                if (this.searchInput) {
+                    this.fetchedPlanets = [];
+                    apiUrl += `?search=${this.searchInput}`;
+                }
                 const res = await getAPI(apiUrl);
                 this.planetsCount = res.data.count;
                 this.fetchedPlanets.push(...res.data.results);
@@ -36,9 +41,14 @@ export const usePlanetsStore = defineStore({
         async fetchWookieePlanets() {
             // get planets from swapi with wookiee
             try {
+                this.isFetchingPlanets = true;
                 let apiUrl = `${constants.baseUrl}planets/?format=wookiee`;
                 if (this.page > 1) {
                     apiUrl += `&page=${this.page}`;
+                }
+                if (this.searchInput) {
+                    this.fetchedPlanets = [];
+                    apiUrl += `&search=${this.searchInput}`;
                 }
                 fetch(apiUrl)
                     .then(response => {

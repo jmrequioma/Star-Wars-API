@@ -7,6 +7,7 @@ export const useStarshipsStore = defineStore({
     state: () => ({
         fetchedStarships: [],
         isFetchingStarships: false,
+        searchInput: '',
         starshipsCount: 0,
         page: 1
     }),
@@ -22,6 +23,10 @@ export const useStarshipsStore = defineStore({
                 let apiUrl = '/starships/';
                 if (this.page > 1) {
                     apiUrl += `?page=${this.page}`;
+                }
+                if (this.searchInput) {
+                    this.fetchedStarships = [];
+                    apiUrl += `?search=${this.searchInput}`;
                 }
                 const res = await getAPI(apiUrl);
                 this.starshipsCount = res.data.count;
@@ -39,6 +44,10 @@ export const useStarshipsStore = defineStore({
                 let apiUrl = `${constants.baseUrl}starships/?format=wookiee`;
                 if (this.page > 1) {
                     apiUrl += `&page=${this.page}`;
+                }
+                if (this.searchInput) {
+                    this.fetchedStarships = [];
+                    apiUrl += `&search=${this.searchInput}`;
                 }
                 fetch(apiUrl)
                     .then(response => {
