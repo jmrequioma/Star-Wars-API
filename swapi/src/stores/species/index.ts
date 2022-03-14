@@ -7,6 +7,7 @@ export const useSpeciesStore = defineStore({
     state: () => ({
         fetchedSpecies: [],
         isFetchingSpecies: false,
+        searchInput: '',
         speciesCount: 0,
         page: 1
     }),
@@ -22,6 +23,10 @@ export const useSpeciesStore = defineStore({
                 let apiUrl = '/species/';
                 if (this.page > 1) {
                     apiUrl += `?page=${this.page}`;
+                }
+                if (this.searchInput) {
+                    this.fetchedSpecies = [];
+                    apiUrl += `?search=${this.searchInput}`;
                 }
                 const res = await getAPI(apiUrl);
                 this.speciesCount = res.data.count;
@@ -39,6 +44,10 @@ export const useSpeciesStore = defineStore({
                 let apiUrl = `${constants.baseUrl}species/?format=wookiee`;
                 if (this.page > 1) {
                     apiUrl += `&page=${this.page}`;
+                }
+                if (this.searchInput) {
+                    this.fetchedSpecies = [];
+                    apiUrl += `&search=${this.searchInput}`;
                 }
                 fetch(apiUrl)
                     .then(response => {

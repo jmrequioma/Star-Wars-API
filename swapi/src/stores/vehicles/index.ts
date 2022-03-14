@@ -7,6 +7,7 @@ export const useVehiclesStore = defineStore({
     state: () => ({
         fetchedVehicles: [],
         isFetchingVehicles: false,
+        searchInput: '',
         vehiclesCount: 0,
         page: 1
     }),
@@ -22,6 +23,10 @@ export const useVehiclesStore = defineStore({
                 let apiUrl = '/vehicles/';
                 if (this.page > 1) {
                     apiUrl += `?page=${this.page}`;
+                }
+                if (this.searchInput) {
+                    this.fetchedVehicles = [];
+                    apiUrl += `?search=${this.searchInput}`;
                 }
                 const res = await getAPI(apiUrl);
                 this.vehiclesCount = res.data.count;
@@ -39,6 +44,10 @@ export const useVehiclesStore = defineStore({
                 let apiUrl = `${constants.baseUrl}vehicles/?format=wookiee`;
                 if (this.page > 1) {
                     apiUrl += `&page=${this.page}`;
+                }
+                if (this.searchInput) {
+                    this.fetchedVehicles = [];
+                    apiUrl += `&search=${this.searchInput}`;
                 }
                 fetch(apiUrl)
                     .then(response => {

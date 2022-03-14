@@ -1,6 +1,6 @@
 <template>
     <div class="table-container">
-        <v-table>
+        <v-table v-if="selectedEntity || entities?.length">
             <template v-slot:default>
                 <thead>
                     <tr>

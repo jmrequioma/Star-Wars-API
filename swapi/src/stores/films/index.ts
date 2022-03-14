@@ -7,6 +7,7 @@ export const useFilmsStore = defineStore({
     state: () => ({
         fetchedFilms: [],
         isFetchingFilms: false,
+        searchInput: '',
         filmsCount: 0,
         page: 1
     }),
@@ -22,6 +23,10 @@ export const useFilmsStore = defineStore({
                 let apiUrl = '/films/';
                 if (this.page > 1) {
                     apiUrl += `?page=${this.page}`;
+                }
+                if (this.searchInput) {
+                    this.fetchedFilms = [];
+                    apiUrl += `?search=${this.searchInput}`;
                 }
                 const res = await getAPI(apiUrl);
                 this.filmsCount = res.data.count;
@@ -39,6 +44,10 @@ export const useFilmsStore = defineStore({
                 let apiUrl = `${constants.baseUrl}films/?format=wookiee`;
                 if (this.page > 1) {
                     apiUrl += `&page=${this.page}`;
+                }
+                if (this.searchInput) {
+                    this.fetchedFilms = [];
+                    apiUrl += `&search=${this.searchInput}`;
                 }
                 fetch(apiUrl)
                     .then(response => {

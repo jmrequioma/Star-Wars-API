@@ -7,6 +7,7 @@ export const usePeopleStore = defineStore({
     state: () => ({
         fetchedPeople: [],
         isFetchingPeople: false,
+        searchInput: '',
         peopleCount: 0,
         page: 1
     }),
@@ -22,6 +23,10 @@ export const usePeopleStore = defineStore({
                 let apiUrl = '/people/';
                 if (this.page > 1) {
                     apiUrl += `?page=${this.page}`;
+                }
+                if (this.searchInput) {
+                    this.fetchedPeople = [];
+                    apiUrl += `?search=${this.searchInput}`;
                 }
                 const res = await getAPI(apiUrl);
                 this.peopleCount = res.data.count;
@@ -39,6 +44,10 @@ export const usePeopleStore = defineStore({
                 let apiUrl = `${constants.baseUrl}people/?format=wookiee`;
                 if (this.page > 1) {
                     apiUrl += `&page=${this.page}`;
+                }
+                if (this.searchInput) {
+                    this.fetchedPeople = [];
+                    apiUrl += `&search=${this.searchInput}`;
                 }
                 fetch(apiUrl)
                     .then(response => {
