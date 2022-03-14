@@ -14,9 +14,11 @@ export function useFetchRelatedEntities(url : Ref) {
     });
 
     onMounted(() => {
-        store.isFetchingDetails = true;
-        fetchSelectedEntity(url.value);
-        store.isFetchingDetails = false;
+        if (!store.selectedEntity) {
+            store.isFetchingDetails = true;
+            fetchSelectedEntity(url.value);
+            store.isFetchingDetails = false;
+        }
     });
 
     watch(
