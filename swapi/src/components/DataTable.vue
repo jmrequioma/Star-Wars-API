@@ -27,6 +27,7 @@
                         <tr
                             v-for="entity in entities"
                             :key="entity.name"
+                            class="entity-display"
                             @click="goToDetails(entity)"
                         >
                             <td>
@@ -50,6 +51,7 @@
                                             <router-link
                                                 @click="entityStore.entity = null"
                                                 :to="relatedEntityLink(data, key)"
+                                                class="router-link"
                                             >
                                                 {{ data }}
                                             </router-link>

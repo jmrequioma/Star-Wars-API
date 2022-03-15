@@ -17,8 +17,8 @@ export function useFetchRelatedEntities(url : Ref) {
         if (!store.selectedEntity) {
             store.isFetchingDetails = true;
             fetchSelectedEntity(url.value);
-            store.isFetchingDetails = false;
         }
+        store.isFetchingDetails = false;
     });
 
     watch(
