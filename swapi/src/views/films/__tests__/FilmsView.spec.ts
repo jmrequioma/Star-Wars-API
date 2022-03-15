@@ -4,7 +4,7 @@ import { setActivePinia, createPinia } from 'pinia';
 import { useAppStore } from '@/stores/app/index';
 import { useFilmsStore } from '@/stores/films/index';
 import { createRouter, createWebHistory, type Router } from 'vue-router';
-import { filmData } from '@/tests/films';
+import { filmData } from '@/tests/films/data';
 
 import FilmsView from '../FilmsView.vue';
 

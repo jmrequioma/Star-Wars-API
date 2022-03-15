@@ -4,7 +4,7 @@ import { setActivePinia, createPinia } from 'pinia';
 import { useAppStore } from '@/stores/app/index';
 import { usePeopleStore } from '@/stores/people';
 import { createRouter, createWebHistory, type Router } from 'vue-router';
-import { peopleData } from '@/tests/people/index';
+import { peopleData } from '@/tests/people/data';
 
 import PeopleView from '../PeopleView.vue';
 
@@ -43,7 +43,7 @@ describe('PeopleView', () => {
     it('fetches the list of people', async() => {
         const people = fetchPeople();
 
-        // set films on store
+        // set people on store
         store.fetchedPeople = people;
         store.isFetchingPeople = false;
 
@@ -58,10 +58,10 @@ describe('PeopleView', () => {
     });
 
     it('fetches the list of wookiee people', async() => {
-        const wookieeFilms = fetchWookieePeople();
+        const wookieePeople = fetchWookieePeople();
 
-        // set films on store
-        store.fetchedPeople = wookieeFilms;
+        // set people on store
+        store.fetchedPeople = wookieePeople;
         store.isFetchingPeople = false;
 
         // set wookiee encoding

@@ -4,7 +4,7 @@ import { setActivePinia, createPinia } from 'pinia';
 import { useAppStore } from '@/stores/app/index';
 import { useEntityStore } from '@/stores';
 import { createRouter, createWebHistory, type Router } from 'vue-router';
-import { starshipData } from '@/tests/starships/index';
+import { starshipData } from '@/tests/starships/data';
 
 import DataTable from '../DataTable.vue';
 
