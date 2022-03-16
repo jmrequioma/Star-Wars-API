@@ -9,6 +9,8 @@ export const useAppStore = defineStore({
 
     },
     actions: {
-
+        toggleWookieeSwitch(isWookieeEncoding : boolean) {
+            this.isWookieeEncoding = isWookieeEncoding;
+        }
     }
 });

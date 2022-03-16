@@ -60,20 +60,20 @@ import { useRoute } from 'vue-router';
 const route = useRoute();
 
 function navItemIsActive(routeName : string) : boolean {
-    if (routeName == 'home') {
-        return route.name == routeName;
-    } else if (routeName == 'planets') {
-        return route.name == routeName || route.name == 'planet details';
-    } else if (routeName == 'people') {
-        return route.name == routeName || route.name == 'people details';
-    } else if (routeName == 'films') {
-        return route.name == routeName || route.name == 'film details';
-    } else if (routeName == 'starships') {
-        return route.name == routeName || route.name == 'starship details';
-    } else if (routeName == 'vehicles') {
-        return route.name == routeName || route.name == 'vehicle details';
-    } else if (routeName == 'species') {
-        return route.name == routeName || route.name == 'specie details';
+    if (routeName === 'home') {
+        return route.name === routeName;
+    } else if (routeName === 'planets') {
+        return route.name === routeName || route.name === 'planet details';
+    } else if (routeName === 'people') {
+        return route.name === routeName || route.name === 'people details';
+    } else if (routeName === 'films') {
+        return route.name === routeName || route.name === 'film details';
+    } else if (routeName === 'starships') {
+        return route.name === routeName || route.name === 'starship details';
+    } else if (routeName === 'vehicles') {
+        return route.name === routeName || route.name === 'vehicle details';
+    } else if (routeName === 'species') {
+        return route.name === routeName || route.name === 'specie details';
     }
     return false;
 }

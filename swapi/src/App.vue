@@ -21,7 +21,8 @@
                 class="d-flex justify-center mr-2"
             >
                 <v-switch
-                    v-model="store.isWookieeEncoding"
+                    v-model="isWookieeEncoding"
+                    @change="setWookieeEncoding"
                     class="toggle"
                     hide-details
                 >
@@ -58,11 +59,15 @@ const drawer = ref(false);
 const route = useRoute();
 const store = useAppStore();
 
+const isWookieeEncoding = ref(false);
+
 const appbarTitle = computed(() => {
     return route.name;
 });
 
-
+function setWookieeEncoding() {
+    store.toggleWookieeSwitch(isWookieeEncoding.value);
+}
 
 emitter.on('search', () => {
     drawer.value = true;

@@ -65,6 +65,17 @@ export const usePeopleStore = defineStore({
             } finally {
                 this.isFetchingPeople = false;
             }
+        },
+
+        setToInitialState() {
+            /**
+             * resets the variables
+             * to the original state
+             */
+
+            this.isFetchingPeople = true;
+            this.page = 1;
+            this.fetchedPeople = [];
         }
     }
 });

@@ -1,7 +1,8 @@
 <template>
     <div class="input-container">
         <v-text-field
-            v-model.trim="store.searchInput"
+            v-model.trim="searchInput"
+            v-on:keyup="onInput"
             label="Search"
             variant="outlined"
             clearable
@@ -28,7 +29,7 @@
     </div>
 </template>
 <script setup lang="ts">
-import { onMounted } from 'vue';
+import { onMounted, toRef } from 'vue';
 import { usePeopleStore } from '@/stores/people';
 import { useAppStore } from '@/stores/app';
 import { useRouter } from 'vue-router';
@@ -43,28 +44,31 @@ const appStore = useAppStore();
 const router = useRouter();
 const { debounce } = useDebouncedRef();
 
+const searchInput = toRef(store, 'searchInput');
+
 onMounted(() => {
     resetState();
     getPeople();
 });
 
-appStore.$subscribe((value) => {
-    // watch for a change in the toggle
-    if (value.events.key == 'isWookieeEncoding') {
-        resetState();
-        getPeople();
-    }
-});
-
-store.$subscribe((value) => {
-    // watch for a change in the text field
-    if (value.events.key == 'searchInput') {
-        resetState();
-        debounce(() => {
+appStore.$onAction(
+    ({
+        toggleWookieeSwitch,
+        after
+    }) => {
+        after(() => {
+            resetState();
             getPeople();
-        }, 850);
+        });
     }
-});
+);
+
+function onInput() {
+    resetState();
+    debounce(() => {
+        getPeople();
+    }, 850);
+}
 
 function getPeople() {
     if (!appStore.isWookieeEncoding) {
@@ -89,7 +93,7 @@ function openDetails(url : string) {
 }
 
 function fetchMore() {
-    if (store.page < (store.peopleCount / 10)) {
+    if (store.page < (store.peopleCount / 10) && !store.searchInput) {
         store.page++;
         getPeople();
     }

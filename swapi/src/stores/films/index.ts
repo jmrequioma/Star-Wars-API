@@ -66,6 +66,17 @@ export const useFilmsStore = defineStore({
             } finally {
                 this.isFetchingFilms = false;
             }
+        },
+
+        setToInitialState() {
+            /**
+             * resets the variables
+             * to the original state
+             */
+
+            this.isFetchingFilms = true;
+            this.page = 1;
+            this.fetchedFilms = [];
         }
     }
 });

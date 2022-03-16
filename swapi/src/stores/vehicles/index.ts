@@ -65,6 +65,17 @@ export const useVehiclesStore = defineStore({
             } finally {
                 this.isFetchingVehicles = false;
             }
+        },
+
+        setToInitialState() {
+            /**
+             * resets the variables
+             * to the original state
+             */
+
+            this.isFetchingVehicles = true;
+            this.page = 1;
+            this.fetchedVehicles = [];
         }
     }
 });

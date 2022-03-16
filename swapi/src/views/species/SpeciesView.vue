@@ -1,8 +1,9 @@
 <template>
     <div class="input-container">
         <v-text-field
-            v-model.trim="store.searchInput"
+            v-model.trim="searchInput"
             label="Search"
+            v-on:keyup="onInput"
             variant="outlined"
             clearable
             clear-icon="mdi-close"
@@ -28,7 +29,7 @@
     </div>
 </template>
 <script setup lang="ts">
-import { onMounted } from 'vue';
+import { onMounted, toRef } from 'vue';
 import { useSpeciesStore } from '@/stores/species';
 import { useAppStore } from '@/stores/app';
 import { useRouter } from 'vue-router';
@@ -43,6 +44,8 @@ const appStore = useAppStore();
 const router = useRouter();
 const { debounce } = useDebouncedRef();
 
+const searchInput = toRef(store, 'searchInput');
+
 onMounted(() => {
     if (!store.fetchedSpecies.length) {
         store.isFetchingSpecies = true;
@@ -51,23 +54,24 @@ onMounted(() => {
     }
 });
 
-appStore.$subscribe((value) => {
-    // watch for a change in the toggle
-    if (value.events.key == 'isWookieeEncoding') {
-        resetState();
-        getSpecies();
-    }
-});
-
-store.$subscribe((value) => {
-    // watch for a change in the text field
-    if (value.events.key == 'searchInput') {
-        resetState();
-        debounce(() => {
+appStore.$onAction(
+    ({
+        toggleWookieeSwitch,
+        after
+    }) => {
+        after(() => {
+            resetState();
             getSpecies();
-        }, 850);
+        });
     }
-});
+);
+
+function onInput() {
+    resetState();
+    debounce(() => {
+        getSpecies();
+    }, 850);
+}
 
 function getSpecies() {
     if (!appStore.isWookieeEncoding) {
@@ -92,7 +96,7 @@ function openDetails(url : string) {
 }
 
 function fetchMore() {
-    if (store.page < (store.speciesCount / 10)) {
+    if (store.page < (store.speciesCount / 10) && !store.searchInput) {
         store.page++;
         getSpecies();
     }
@@ -104,9 +108,7 @@ function resetState() {
      * to the original state
      */
 
-    store.isFetchingSpecies = true;
-    store.page = 1;
-    store.fetchedSpecies = [];
+    store.setToInitialState();
 
 }
 </script>

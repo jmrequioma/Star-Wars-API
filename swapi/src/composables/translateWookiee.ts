@@ -3,7 +3,7 @@ import { dictionary } from '@/lib/lang.js';
 export function useTranslateWookiee() {
     function translateWookieeToEnglish(wookieeWord : string) {
         for (const word in dictionary) {
-            if (dictionary[word].wk == wookieeWord) {
+            if (dictionary[word].wk === wookieeWord) {
                 return dictionary[word].en;
             }
         }
@@ -12,7 +12,7 @@ export function useTranslateWookiee() {
 
     function translateEnglishToWookie(englishWord: string) {
         for (const word in dictionary) {
-            if (dictionary[word].en == englishWord) {
+            if (dictionary[word].en === englishWord) {
                 return dictionary[word].wk;
             }
         }
