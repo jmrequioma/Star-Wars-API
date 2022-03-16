@@ -65,6 +65,17 @@ export const useStarshipsStore = defineStore({
             } finally {
                 this.isFetchingStarships = false;
             }
+        },
+
+        setToInitialState() {
+            /**
+             * resets the variables
+             * to the original state
+             */
+
+            this.isFetchingStarships = true;
+            this.page = 1;
+            this.fetchedStarships = [];
         }
     }
 });

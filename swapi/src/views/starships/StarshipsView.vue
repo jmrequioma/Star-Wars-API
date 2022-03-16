@@ -1,7 +1,8 @@
 <template>
     <div class="input-container">
         <v-text-field
-            v-model.trim="store.searchInput"
+            v-model.trim="searchInput"
+            v-on:keyup="onInput"
             label="Search"
             variant="outlined"
             clearable
@@ -28,7 +29,7 @@
     </div>
 </template>
 <script setup lang="ts">
-import { onMounted } from 'vue';
+import { onMounted, toRef } from 'vue';
 import { useStarshipsStore } from '@/stores/starships';
 import { useAppStore } from '@/stores/app';
 import { useRouter } from 'vue-router';
@@ -43,28 +44,31 @@ const appStore = useAppStore();
 const router = useRouter();
 const { debounce } = useDebouncedRef();
 
+const searchInput = toRef(store, 'searchInput');
+
 onMounted(() => {
     resetState();
     getStarships();
 });
 
-appStore.$subscribe((value) => {
-    // watch for a change in the toggle
-    if (value.events.key == 'isWookieeEncoding') {
-        resetState();
-        getStarships();
-    }
-});
-
-store.$subscribe((value) => {
-    // watch for a change in the text field
-    if (value.events.key == 'searchInput') {
-        resetState();
-        debounce(() => {
+appStore.$onAction(
+    ({
+        toggleWookieeSwitch,
+        after
+    }) => {
+        after(() => {
+            resetState();
             getStarships();
-        }, 850);
+        });
     }
-});
+);
+
+function onInput() {
+    resetState();
+    debounce(() => {
+        getStarships();
+    }, 850);
+}
 
 function getStarships() {
     if (!appStore.isWookieeEncoding) {
@@ -101,9 +105,7 @@ function resetState() {
      * to the original state
      */
 
-    store.isFetchingStarships = true;
-    store.page = 1;
-    store.fetchedStarships = [];
+    store.setToInitialState();
 
 }
 </script>

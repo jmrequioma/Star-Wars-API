@@ -53,7 +53,7 @@ export function useFetchRelatedEntities(url : Ref) {
         const convertedList = [];
         for (const key in store.entity) {
             if (relatedEntitiesCol.value.includes(key) &&
-                typeof(store.entity[key]) == 'string') {
+                typeof(store.entity[key]) === 'string') {
                 // push this into an array and make it
                 // the new value so we can loop through
                 // it on the DataTable Component

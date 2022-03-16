@@ -65,6 +65,17 @@ export const useSpeciesStore = defineStore({
             } finally {
                 this.isFetchingSpecies = false;
             }
+        },
+
+        setToInitialState() {
+            /**
+             * resets the variables
+             * to the original state
+             */
+
+            this.isFetchingSpecies = true;
+            this.page = 1;
+            this.fetchedSpecies = [];
         }
     }
 });

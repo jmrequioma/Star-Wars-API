@@ -101,11 +101,11 @@ const relatedEntitiesCol = computed(() => {
 
 const headerDisplay = computed(() => {
     if (!appStore.isWookieeEncoding) {
-        return route.name == 'films' ? 'Title' : 'Name';
+        return route.name === 'films' ? 'Title' : 'Name';
     } else {
         let title = translateEnglishToWookie('title');
         let name = translateEnglishToWookie('name');
-        return route.name == 'films' ? title : name;
+        return route.name === 'films' ? title : name;
     }
 });
 
@@ -147,23 +147,23 @@ function relatedEntityLink(url : string, key : object) {
         }
     };
     let modifiedUrl = url;
-    if (typeof(key) == 'string') {
+    if (typeof(key) === 'string') {
         modifiedUrl = key;
     }
     if (modifiedUrl) {
         let { entityId, entityName } = useExtractId(modifiedUrl);
         const translatedWookieeWord = translateWookieeToEnglish(entityName.value);
-        if (entityName.value == 'people' || translatedWookieeWord == 'people') {
+        if (entityName.value === 'people' || translatedWookieeWord === 'people') {
             link.name = 'people details';
-        } else if (entityName.value == 'films' || translatedWookieeWord == 'films') {
+        } else if (entityName.value === 'films' || translatedWookieeWord === 'films') {
             link.name = 'film details';
-        } else if (entityName.value == 'planets' || translatedWookieeWord == 'planets') {
+        } else if (entityName.value === 'planets' || translatedWookieeWord === 'planets') {
             link.name = 'planet details';
-        } else if (entityName.value == 'starships' || translatedWookieeWord == 'starships') {
+        } else if (entityName.value === 'starships' || translatedWookieeWord === 'starships') {
             link.name = 'starship details';
-        } else if (entityName.value == 'vehicles' || translatedWookieeWord == 'vehicles') {
+        } else if (entityName.value === 'vehicles' || translatedWookieeWord === 'vehicles') {
             link.name = 'vehicle details';
-        } else if (entityName.value == 'species' || translatedWookieeWord == 'species') {
+        } else if (entityName.value === 'species' || translatedWookieeWord === 'species') {
             link.name = 'specie details';
         }
         link.params.id = entityId.value;
@@ -181,7 +181,7 @@ function displayData(entity : object) {
         // find for the name and title in wookiee since
         // the object has wookiee properties
         for (let property in entity) {
-            if (name == property || title == property) {
+            if (name === property || title === property) {
                 return entity[property];
             }
         }

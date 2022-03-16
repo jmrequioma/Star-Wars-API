@@ -66,6 +66,17 @@ export const usePlanetsStore = defineStore({
             } finally {
                 this.isFetchingPlanets = false;
             }
+        },
+
+        setToInitialState() {
+            /**
+             * resets the variables
+             * to the original state
+             */
+
+            this.isFetchingPlanets = true;
+            this.page = 1;
+            this.fetchedPlanets = [];
         }
     }
 });
