@@ -27,7 +27,8 @@
                         <tr
                             v-for="entity in entities"
                             :key="entity.name"
-                            @click="goToDetails(entity.url || entity.hurcan)"
+                            class="entity-display"
+                            @click="goToDetails(entity)"
                         >
                             <td>
                                 {{ displayData(entity) }}
@@ -48,7 +49,9 @@
                                             class="related-entity-data"
                                         >
                                             <router-link
+                                                @click="entityStore.entity = null"
                                                 :to="relatedEntityLink(data, key)"
+                                                class="router-link"
                                             >
                                                 {{ data }}
                                             </router-link>
@@ -75,6 +78,7 @@ import { constants } from '@/lib/constants/index.js';
 import { useRoute } from 'vue-router';
 import { useExtractId } from '@/composables/extractId';
 import { useAppStore } from '@/stores/app';
+import { useEntityStore } from '@/stores/index';
 import { useTranslateWookiee } from '@/composables/translateWookiee';
 
 const route = useRoute();
@@ -83,6 +87,7 @@ const emit = defineEmits([
 ]);
 
 const appStore = useAppStore();
+const entityStore = useEntityStore();
 
 defineProps({
     showDetails: Boolean,
@@ -113,7 +118,7 @@ const { translateWookieeToEnglish, translateEnglishToWookie } = useTranslateWook
 onMounted(() => {
     const listElm = document.querySelector('.table-container');
     if (listElm) {
-        listElm.addEventListener('scroll', e => {
+        listElm.addEventListener('scroll', () => {
             if (listElm.scrollTop + listElm.clientHeight >= listElm.scrollHeight) {
                 emit('fetchMore');
             }
@@ -121,11 +126,12 @@ onMounted(() => {
     }
 });
 
-function goToDetails(url : string) {
+function goToDetails(entity : object) {
     /* this function opens the details page of
         selected entity on table row via emission
     */
-    emit('openDetails', url);
+    entityStore.entity = entity;
+    emit('openDetails', entity.url || entity.hurcan);
 }
 
 function relatedEntityLink(url : string, key : object) {

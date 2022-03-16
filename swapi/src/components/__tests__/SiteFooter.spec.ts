@@ -13,7 +13,7 @@ describe('SiteFooter', () => {
     it('validates the social links', () => {
         const igBtn = wrapper.find('v-btn.ig-btn');
         const linkedinBtn = wrapper.find('v-btn.linkedin-btn');
-        const twitterBtn = wrapper.find('v-btn.twitter-btn');
+        const gmailBtn = wrapper.find('v-btn.gmail-btn');
 
         expect(igBtn.attributes().href).toBe(
             'https://www.instagram.com/roamherome/'
@@ -21,8 +21,8 @@ describe('SiteFooter', () => {
         expect(linkedinBtn.attributes().href).toBe(
             'https://www.linkedin.com/in/jerome-enrico-requioma-2a954a195/'
         );
-        expect(twitterBtn.attributes().href).toBe(
-            'https://www.twitter.com/SayHieronimo/'
+        expect(gmailBtn.attributes().href).toBe(
+            'mailto:j.requioma@arcanys.com'
         );
     });
 });
