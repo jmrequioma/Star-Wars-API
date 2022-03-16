@@ -1,13 +1,13 @@
 import { describe, it, expect, beforeEach } from 'vitest';
 import { mount, VueWrapper } from '@vue/test-utils';
 
-import PlanetsMain from '../PlanetsMain.vue';
+import VehiclesMain from '../VehiclesMain.vue';
 
-describe('PlanetsMain', () => {
+describe('VehiclesMain', () => {
     let wrapper : VueWrapper;
 
     beforeEach(() => {
-        wrapper = mount(PlanetsMain);
+        wrapper = mount(VehiclesMain);
     });
 
     it('validates usage of router view', () => {
